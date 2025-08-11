@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const imageData = [
   {
@@ -57,9 +58,6 @@ export default function Home() {
             </span>
           </a>
 
-          <button className="hidden sm:inline-flex transition-all hover:shadow-md hover:bg-gray-100 text-sm font-medium text-black bg-white rounded-full pt-2 pr-6 pb-2 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] items-center justify-center">
-            CONTACT US
-          </button>
           <button className="md:hidden p-2 rounded-lg transition-colors hover:bg-white/20">
             <Menu className="w-6 h-6" />
           </button>
@@ -81,13 +79,14 @@ export default function Home() {
                 </p>
 
                 <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-600">
-                  <a
-                    href="#"
-                    className="inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 font-medium text-black bg-gradient-to-br from-yellow-50 via-amber-50 to-stone-200 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-lg border-t border-white/50"
-                  >
-                    Join Waitlist
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
+                  <Link href="/waitlist">
+                    <button
+                      className="inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 font-medium text-black bg-gradient-to-br from-yellow-50 via-amber-50 to-stone-200 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-lg border-t border-white/50"
+                    >
+                      Join Waitlist
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </Link>
                 </div>
 
                 <div className="mt-12 flex items-center gap-8 animate-slide-up animate-delay-800">
