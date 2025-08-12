@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, MicOff, X } from 'lucide-react';
 import useVapi from '@/hooks/use-vapi';
@@ -12,6 +12,7 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
   const { volumeLevel, isSessionActive, toggleCall, conversation } = useVapi(assistantId);
   const [bars, setBars] = useState(Array(50).fill(0));
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+  const liveTranscriptEndRef = useRef<HTMLDivElement | null>(null);
  
   useEffect(() => {
     if (isSessionActive) {
@@ -27,6 +28,11 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
       console.log('Live Transcript Update:', conversation[conversation.length - 1]);
       console.log('Full Conversation:', conversation);
     }
+  }, [conversation]);
+
+  // Auto scroll live transcript to newest message
+  useEffect(() => {
+    liveTranscriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
 
   const openTranscript = () => {
@@ -45,7 +51,15 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
   };
  
   return (
-      <div className='border text-center justify-items-center p-4 rounded-2xl'>
+      <div className='border text-center justify-items-center p-4 rounded-2xl relative'>
+        {/* Show Transcript Button (top-right) */}
+        <button
+          onClick={openTranscript}
+          className="absolute top-3 right-3 z-20 px-3 py-1.5 rounded-md bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-sm"
+          aria-label="Show transcript"
+        >
+          Show Transcript
+        </button>
         <div className="flex items-center justify-center h-full relative" style={{ width: '300px', height: '300px' }}>
           { isSessionActive ? 
           <MicOff
@@ -90,7 +104,7 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
           <span className="absolute top-48 w-[calc(100%-70%)] h-[calc(100%-70%)] bg-primary blur-[120px]"></span>
         </div>
         
-        {/* Live Transcript Display (enlarged) */}
+        {/* Live Transcript Display (enlarged, transparent bubbles) */}
         {conversation.length > 0 && (
           <div className="mt-6 max-h-80 overflow-y-auto">
             <h3 className="text-base font-semibold mb-3 text-gray-700 dark:text-gray-300">Live Transcript</h3>
@@ -101,11 +115,9 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`p-3 rounded-lg text-base leading-relaxed ${
-                    message.role === 'user'
-                      ? 'bg-blue-100 dark:bg-blue-900/60 ml-8 text-blue-900 dark:text-blue-100'
-                      : 'bg-gray-100 dark:bg-gray-800/60 mr-8 text-gray-900 dark:text-gray-100'
-                  }`}
+                  className={`text-base leading-relaxed ${
+                    message.role === 'user' ? 'ml-8' : 'mr-8'
+                  } text-gray-900 dark:text-gray-100`}
                 >
                   <span className="font-semibold mr-1">
                     {message.role === 'user' ? 'You:' : 'Assistant:'}
@@ -115,19 +127,10 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
                   </span>
                 </motion.div>
               ))}
+              <div ref={liveTranscriptEndRef} />
             </div>
           </div>
         )}
-
-        {/* Show Transcript Button */}
-        <div className="mt-4">
-          <button
-            onClick={openTranscript}
-            className="px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
-          >
-            Show Transcript
-          </button>
-        </div>
 
         {/* Transcript Modal */}
         {isTranscriptOpen && (
@@ -148,11 +151,9 @@ const RadialCard: React.FC<RadialCardProps> = ({ assistantId }) => {
                     {conversation.map((message, index) => (
                       <div
                         key={index}
-                        className={`p-3 rounded-xl text-base leading-relaxed ${
-                          message.role === 'user'
-                            ? 'bg-blue-100 dark:bg-blue-900/60 text-blue-900 dark:text-blue-100'
-                            : 'bg-gray-100 dark:bg-gray-800/60 text-gray-900 dark:text-gray-100'
-                        }`}
+                        className={`text-base leading-relaxed ${
+                          message.role === 'user' ? 'ml-2' : 'mr-2'
+                        } text-gray-900 dark:text-gray-100`}
                       >
                         <span className="font-semibold mr-1">
                           {message.role === 'user' ? 'You:' : 'Assistant:'}
