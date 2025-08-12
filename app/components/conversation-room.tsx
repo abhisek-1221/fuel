@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import RadialCard from './radial-card';
+import RadialCard, { RadialCardHandle } from './radial-card';
 
 interface ConversationRoomProps {
   questTitle: string;
@@ -15,6 +15,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
   assistantId, 
   onBack 
 }) => {
+  const radialRef = React.useRef<RadialCardHandle | null>(null);
   const getQuestColor = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
@@ -72,16 +73,23 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <RadialCard assistantId={assistantId} />
+          <RadialCard ref={radialRef} assistantId={assistantId} questTitle={questTitle} />
         </motion.div>
       </div>
 
       {/* Footer */}
       <div className="relative z-10 p-6">
-        <div className="text-center">
-          <p className="text-sm text-white/50">
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-white/70">
             Tap the microphone to start your conversation with {questTitle}
           </p>
+          <button
+            onClick={() => radialRef.current?.requestScore()}
+            disabled={!radialRef.current?.getCanScore?.()}
+            className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition disabled:opacity-50"
+          >
+            Show Score
+          </button>
         </div>
       </div>
     </motion.div>
