@@ -1,7 +1,8 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Utensils, UserCheck, Luggage } from 'lucide-react';
+import { Mic } from 'lucide-react';
+import Image from 'next/image';
 
 interface QuestCardProps {
   title: string;
@@ -11,39 +12,41 @@ interface QuestCardProps {
 }
 
 const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, onClick }) => {
-  const getIcon = (title: string) => {
+  const getImageAndText = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
-        return <User className="w-8 h-8 text-pink-500" />;
+        return {
+          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
+          text: 'Nova Flame — Express your burning desire'
+        };
       case 'waiter':
-        return <Utensils className="w-8 h-8 text-orange-500" />;
+        return {
+          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
+          text: 'Bob — Your ally against office monotony'
+        };
       case 'customer':
-        return <UserCheck className="w-8 h-8 text-blue-500" />;
+        return {
+          src: 'https://pbs.twimg.com/media/GvQpuoBXAAAupU-?format=jpg&name=medium',
+          text: 'Prodigy Paws — The smartest cat in school'
+        };
       case 'luggage':
-        return <Luggage className="w-8 h-8 text-green-500" />;
+        return {
+          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
+          text: 'Bob — Your travel companion'
+        };
       default:
-        return <User className="w-8 h-8 text-gray-500" />;
+        return {
+          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
+          text: 'Nova Flame — Express your burning desire'
+        };
     }
   };
 
-  const getGradient = (title: string) => {
-    switch (title.toLowerCase()) {
-      case 'girlfriend':
-        return 'from-pink-500/20 to-purple-500/20';
-      case 'waiter':
-        return 'from-orange-500/20 to-red-500/20';
-      case 'customer':
-        return 'from-blue-500/20 to-cyan-500/20';
-      case 'luggage':
-        return 'from-green-500/20 to-emerald-500/20';
-      default:
-        return 'from-gray-500/20 to-slate-500/20';
-    }
-  };
+  const imageData = getImageAndText(title);
 
   return (
     <motion.div
-      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${getGradient(title)} backdrop-blur-sm p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-white/20`}
+      className="relative rounded-3xl overflow-hidden h-80 sm:h-[28rem] shadow-2xl cursor-pointer"
       onClick={onClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -51,28 +54,31 @@ const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col items-center text-center space-y-4">
-        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm">
-          {getIcon(title)}
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-          <p className="text-sm text-white/70 leading-relaxed">{description}</p>
-        </div>
-        
-        <div className="flex items-center justify-center w-full">
-          <motion.button
-            className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium text-white transition-colors duration-200"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Start Quest
-          </motion.button>
-        </div>
-      </div>
+      <Image
+        src={imageData.src}
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover"
+        width={800}
+        height={448}
+      />
       
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent from-black/60"></div>
+      
+      <div className="absolute top-4 left-4 text-white">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-sm text-white/80 mt-1">{description}</p>
+      </div>
+
+      <div className="absolute bottom-4 left-4 right-4">
+        <motion.button 
+          className="w-full text-black font-semibold rounded-full bg-gradient-to-br from-yellow-50 via-amber-50 to-stone-200 px-6 py-3 text-center shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border-t border-white/50"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Mic className="w-5 h-5" />
+          Start {title} Quest
+        </motion.button>
+      </div>
     </motion.div>
   );
 };
