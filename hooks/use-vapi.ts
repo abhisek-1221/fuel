@@ -8,7 +8,7 @@ const useVapi = (assistantId: string) => {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [conversation, setConversation] = useState<
-    { role: string; text: string; timestamp: string; isFinal: boolean }[]
+    { role: string; text: string; timestamp?: string; isFinal?: boolean }[]
   >([]);
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -54,9 +54,18 @@ const useVapi = (assistantId: string) => {
         setVolumeLevel(level);
       });
 
-      vapi.on("message", (message: any) => {
-        if (message.type === "conversation-update") {
-          setConversation(message.conversation || []);
+      vapi.on('message', (message: any) => {
+        // Log all messages from Vapi for debugging, including function calls and partials
+        console.log('Vapi message:', message);
+
+        if (message.type === 'transcript' && message.transcriptType === 'final') {
+          // Persist final transcripts of both user and assistant
+          const entry = { role: message.role, text: message.transcript } as {
+            role: string;
+            text: string;
+          };
+          console.log('Transcript received:', entry);
+          setConversation((prev) => [...prev, entry]);
         }
       });
 
