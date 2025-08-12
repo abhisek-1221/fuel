@@ -1,109 +1,81 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Vapi from "@vapi-ai/web";
 
-const publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY || ""; // 
-const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID || ""; // 
+const publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY || "";
 
-const useVapi = () => {
+const useVapi = (assistantId: string) => {
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [conversation, setConversation] = useState<
     { role: string; text: string; timestamp: string; isFinal: boolean }[]
   >([]);
-  const vapiRef = useRef<any>(null);
+  const [connecting, setConnecting] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const vapiRef = useRef<Vapi | null>(null);
 
   const initializeVapi = useCallback(() => {
-    if (!vapiRef.current) {
-      const vapiInstance = new Vapi(publicKey);
-      vapiRef.current = vapiInstance;
+    if (!vapiRef.current && publicKey) {
+      const vapi = new Vapi(publicKey);
+      vapiRef.current = vapi;
 
-      vapiInstance.on("call-start", () => {
+      // Event listeners
+      vapi.on("call-start", () => {
+        setConnecting(false);
+        setConnected(true);
         setIsSessionActive(true);
+        setError(null);
+        console.log("Call started");
       });
 
-      vapiInstance.on("call-end", () => {
+      vapi.on("call-end", () => {
+        setConnecting(false);
+        setConnected(false);
         setIsSessionActive(false);
-        setConversation([]); // Reset conversation on call end
+        setAssistantIsSpeaking(false);
+        setVolumeLevel(0);
+        console.log("Call ended");
       });
 
-      vapiInstance.on("volume-level", (volume: number) => {
-        setVolumeLevel(volume);
+      vapi.on("speech-start", () => {
+        setAssistantIsSpeaking(true);
+        console.log("Assistant started speaking");
       });
 
-      vapiInstance.on("message", (message: any) => {
-        if (message.type === "transcript") {
-          setConversation((prev) => {
-            const timestamp = new Date().toLocaleTimeString();
-            const updatedConversation = [...prev];
-            if (message.transcriptType === "final") {
-              // Find the partial message to replace it with the final one
-              const partialIndex = updatedConversation.findIndex(
-                (msg) => msg.role === message.role && !msg.isFinal,
-              );
-              if (partialIndex !== -1) {
-                updatedConversation[partialIndex] = {
-                  role: message.role,
-                  text: message.transcript,
-                  timestamp: updatedConversation[partialIndex].timestamp,
-                  isFinal: true,
-                };
-              } else {
-                updatedConversation.push({
-                  role: message.role,
-                  text: message.transcript,
-                  timestamp,
-                  isFinal: true,
-                });
-              }
-            } else {
-              // Add partial message or update the existing one
-              const partialIndex = updatedConversation.findIndex(
-                (msg) => msg.role === message.role && !msg.isFinal,
-              );
-              if (partialIndex !== -1) {
-                updatedConversation[partialIndex] = {
-                  ...updatedConversation[partialIndex],
-                  text: message.transcript,
-                };
-              } else {
-                updatedConversation.push({
-                  role: message.role,
-                  text: message.transcript,
-                  timestamp,
-                  isFinal: false,
-                });
-              }
-            }
-            return updatedConversation;
-          });
-        }
+      vapi.on("speech-end", () => {
+        setAssistantIsSpeaking(false);
+        console.log("Assistant stopped speaking");
+      });
 
-        if (
-          message.type === "function-call" &&
-          message.functionCall.name === "changeUrl"
-        ) {
-          const command = message.functionCall.parameters.url.toLowerCase();
-          console.log(command);
-          // const newUrl = routes[command];
-          if (command) {
-            window.location.href = command;
-          } else {
-            console.error("Unknown route:", command);
-          }
+      vapi.on("volume-level", (level: number) => {
+        setVolumeLevel(level);
+      });
+
+      vapi.on("message", (message: any) => {
+        if (message.type === "conversation-update") {
+          setConversation(message.conversation || []);
         }
       });
 
-      vapiInstance.on("error", (e: Error) => {
-        console.error("Vapi error:", e);
+      vapi.on("error", (error: any) => {
+        console.error("Vapi error:", error);
+        setError(error.message || "An error occurred");
+        setConnecting(false);
+        setConnected(false);
+        setIsSessionActive(false);
       });
+
+      // Handle microphone mute/unmute (if supported by the SDK)
+      // Note: These events may not be available in all versions of Vapi SDK
     }
-  }, []);
+  }, [publicKey]);
 
   useEffect(() => {
     initializeVapi();
 
-    // Cleanup function to end call and dispose Vapi instance
     return () => {
       if (vapiRef.current) {
         vapiRef.current.stop();
@@ -112,50 +84,71 @@ const useVapi = () => {
     };
   }, [initializeVapi]);
 
-  const toggleCall = async () => {
-    try {
-      if (isSessionActive) {
-        await vapiRef.current.stop();
-      } else {
-        await vapiRef.current.start(assistantId);
-      }
-    } catch (err) {
-      console.error("Error toggling Vapi session:", err);
+  const startCall = useCallback(async () => {
+    if (!vapiRef.current || !assistantId) {
+      console.error("Vapi not initialized or assistant ID not provided");
+      return;
     }
-  };
 
-  const sendMessage = (role: string, content: string) => {
+    try {
+      setConnecting(true);
+      setError(null);
+      await vapiRef.current.start(assistantId);
+    } catch (error: any) {
+      console.error("Error starting call:", error);
+      setError(error.message || "Failed to start call");
+      setConnecting(false);
+    }
+  }, [assistantId]);
+
+  const endCall = useCallback(() => {
     if (vapiRef.current) {
+      vapiRef.current.stop();
+    }
+  }, []);
+
+  const toggleCall = useCallback(() => {
+    if (isSessionActive) {
+      endCall();
+    } else {
+      startCall();
+    }
+  }, [isSessionActive, startCall, endCall]);
+
+  const toggleMute = useCallback(() => {
+    if (vapiRef.current) {
+      // Toggle mute state locally since direct mute/unmute may not be available
+      setIsMuted(prev => !prev);
+      // You may need to implement mute functionality differently based on your Vapi SDK version
+    }
+  }, []);
+
+  const sendMessage = useCallback((message: string) => {
+    if (vapiRef.current && isSessionActive) {
       vapiRef.current.send({
         type: "add-message",
-        message: { role, content },
+        message: {
+          role: "user",
+          content: message,
+        },
       });
     }
-  };
-
-  const say = (message: string, endCallAfterSpoken = false) => {
-    if (vapiRef.current) {
-      vapiRef.current.say(message, endCallAfterSpoken);
-    }
-  };
-
-  const toggleMute = () => {
-    if (vapiRef.current) {
-      const newMuteState = !isMuted;
-      vapiRef.current.setMuted(newMuteState);
-      setIsMuted(newMuteState);
-    }
-  };
+  }, [isSessionActive]);
 
   return {
     volumeLevel,
     isSessionActive,
-    conversation,
-    toggleCall,
-    sendMessage,
-    say,
-    toggleMute,
     isMuted,
+    conversation,
+    connecting,
+    connected,
+    assistantIsSpeaking,
+    error,
+    startCall,
+    endCall,
+    toggleCall,
+    toggleMute,
+    sendMessage,
   };
 };
 

@@ -1,18 +1,116 @@
-import RadialCard from "../components/radial-card";
- 
+"use client";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import QuestCard from "../components/quest-card";
+import ConversationRoom from "../components/conversation-room";
+
+interface Quest {
+  title: string;
+  assistantId: string;
+  description: string;
+}
+
+const quests: Quest[] = [
+  {
+    title: "Girlfriend",
+    assistantId: "5fa87ca6-ab9a-45d9-8772-9dcb651ecdc4",
+    description: "Have a heartfelt conversation with your AI girlfriend companion"
+  },
+  {
+    title: "Waiter",
+    assistantId: "f9229d73-e9f4-4aaa-b65a-80aaceea1c33",
+    description: "Order your favorite meal from our friendly AI waiter"
+  },
+  {
+    title: "Customer",
+    assistantId: "ef9eb4ea-a942-4738-84e6-8ffb1a217b8c",
+    description: "Engage with an AI customer for service training scenarios"
+  },
+  {
+    title: "Luggage",
+    assistantId: "10a36fd6-7031-49da-8e5d-fc5961edf9ae",
+    description: "Get help with your luggage and travel assistance"
+  }
+];
+
 export default function Test() {
+  const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
+
+  const handleQuestSelect = (quest: Quest) => {
+    setSelectedQuest(quest);
+  };
+
+  const handleBackToQuests = () => {
+    setSelectedQuest(null);
+  };
+
   return (
     <>
+      {/* Background */}
       <div
         className="fixed top-0 w-full h-screen bg-cover bg-center -z-10"
         style={{
           backgroundImage:
             'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
         }}
-      ></div>
-      <main className="flex items-center justify-center h-screen">
-        <RadialCard />
-      </main>
+      />
+      
+      <AnimatePresence mode="wait">
+        {!selectedQuest ? (
+          <motion.main
+            key="quest-selection"
+            className="min-h-screen flex flex-col items-center justify-center p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Header */}
+            <motion.div
+              className="text-center mb-12"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h1 className="text-4xl font-bold text-white mb-4">Choose Your Quest</h1>
+              <p className="text-lg text-white/70">Select an AI assistant to start your adventure</p>
+            </motion.div>
+
+            {/* Quest Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+              {quests.map((quest, index) => (
+                <motion.div
+                  key={quest.assistantId}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 + index * 0.1 }}
+                >
+                  <QuestCard
+                    title={quest.title}
+                    assistantId={quest.assistantId}
+                    description={quest.description}
+                    onClick={() => handleQuestSelect(quest)}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.main>
+        ) : (
+          <motion.div
+            key="conversation-room"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ConversationRoom
+              questTitle={selectedQuest.title}
+              assistantId={selectedQuest.assistantId}
+              onBack={handleBackToQuests}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
