@@ -51,7 +51,7 @@ export default function Home() {
             className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
             <div className="w-8 h-8 bg-gradient-to-br rounded-full flex items-center justify-center from-black to-gray-700">
-              <TrendingUp className="w-4 h-4 text-white" />
+              <TrendingUp className="w-4 h-4 text-white" /> 
             </div>
             <span className="font-semibold text-lg tracking-tight font-sans">
               Feul.AI

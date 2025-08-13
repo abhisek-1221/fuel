@@ -30,18 +30,23 @@ export async function POST(req: Request) {
 
     const scenario = questTitle ? `Scenario: ${questTitle}.` : '';
 
-    const instruction = `You are a strict evaluator for spoken role-play practice. ${scenario} Read the conversation transcript between the user and the assistant. Score how well the USER handled the situation on a scale from 0 to 500. Consider:
- - clarity and coherence
- - politeness and tone
- - goal completion and appropriateness
- - naturalness and responsiveness
+    const instruction = `You are a strict evaluator for spoken role-play practice. ${scenario} Read the conversation transcript between the user and the assistant. Evaluate how well the USER handled the situation.
 
-Rules:
- - Return ONLY a single integer from 0 to 500. No words, no labels, no explanations.
- - If unsure, estimate conservatively.
+Return STRICT JSON with the following shape and nothing else:
+{
+  "score": number,            // integer 0..500
+  "stars": number,            // integer 1..5 (derived from score)
+  "summary": string,          // 1-2 sentences summary of performance
+  "strengths": string[],      // 3 short bullet points
+  "improvements": string[]    // 3 concise suggestions
+}
+
+Scoring guidance (0..500):
+- clarity/coherence, politeness/tone, goal completion/appropriateness, naturalness/responsiveness.
+- If unsure, estimate conservatively.
 `;
 
-    const prompt = `${instruction}\n\nTranscript:\n${conversationText}\n\nScore (0-500):`;
+    const prompt = `${instruction}\n\nTranscript:\n${conversationText}\n\nJSON:`;
 
     const { text } = await generateText({
       model: google('models/gemini-1.5-flash') as any,
@@ -50,13 +55,34 @@ Rules:
       maxRetries: 1,
     });
 
-    const match = text.match(/\d{1,3}|[45]\d{2}/);
-    let score = match ? parseInt(match[0], 10) : 0;
-    if (Number.isNaN(score)) score = 0;
+    let data: any = null;
+    // Try direct JSON parse
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // Try to extract JSON block
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try { data = JSON.parse(jsonMatch[0]); } catch {}
+      }
+    }
+
+    if (!data || typeof data !== 'object') {
+      throw new Error('Model did not return valid JSON');
+    }
+
+    let score = Number.isFinite(data.score) ? Math.round(Number(data.score)) : 0;
     if (score < 0) score = 0;
     if (score > 500) score = 500;
+    let stars = Number.isFinite(data.stars) ? Math.round(Number(data.stars)) : Math.max(1, Math.min(5, Math.round(score / 100)));
+    if (stars < 1) stars = 1;
+    if (stars > 5) stars = 5;
 
-    return NextResponse.json({ score });
+    const summary = typeof data.summary === 'string' ? data.summary : '';
+    const strengths = Array.isArray(data.strengths) ? (data.strengths as unknown[]).filter((s: unknown) => typeof s === 'string').slice(0, 5) as string[] : [];
+    const improvements = Array.isArray(data.improvements) ? (data.improvements as unknown[]).filter((s: unknown) => typeof s === 'string').slice(0, 5) as string[] : [];
+
+    return NextResponse.json({ score, stars, summary, strengths, improvements });
   } catch (error: any) {
     console.error('Score API error:', error);
     return NextResponse.json(

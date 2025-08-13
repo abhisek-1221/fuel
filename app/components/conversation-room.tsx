@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import RadialCard, { RadialCardHandle } from './radial-card';
+import { GradientButton } from './gradientbut';
 
 interface ConversationRoomProps {
   questTitle: string;
@@ -16,6 +17,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
   onBack 
 }) => {
   const radialRef = React.useRef<RadialCardHandle | null>(null);
+  const [canScore, setCanScore] = React.useState(false);
   const getQuestColor = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
@@ -73,7 +75,12 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <RadialCard ref={radialRef} assistantId={assistantId} questTitle={questTitle} />
+          <RadialCard 
+            ref={radialRef} 
+            assistantId={assistantId} 
+            questTitle={questTitle}
+            onCanScoreChange={setCanScore}
+          />
         </motion.div>
       </div>
 
@@ -83,13 +90,13 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           <p className="text-sm text-white/70">
             Tap the microphone to start your conversation with {questTitle}
           </p>
-          <button
+          <GradientButton
             onClick={() => radialRef.current?.requestScore()}
-            disabled={!radialRef.current?.getCanScore?.()}
-            className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition disabled:opacity-50"
-          >
-            Show Score
-          </button>
+            disabled={!canScore}
+            variant="beige"
+            size="md"
+            text="Show Score"
+          />
         </div>
       </div>
     </motion.div>

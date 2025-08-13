@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = 'orange' | 'white' | 'black' | 'gray' | 'blue' | 'green' | 'red';
+type ButtonVariant = 'orange' | 'white' | 'black' | 'gray' | 'blue' | 'green' | 'red' | 'beige';
 
 interface GradientButtonProps {
   text?: string;
@@ -55,6 +55,12 @@ const variantStyles = {
     boxShadow: `0 2px 8px 0 rgba(220, 38, 38, 0.35), 0 1.5px 0 0 rgba(255,255,255,0.25) inset, 0 -2px 8px 0 rgba(220, 38, 38, 0.5) inset`,
     textColor: 'text-white',
     innerShadow: "0 0 0 2px rgba(255,255,255,0.10) inset, 0 1.5px 0 0 rgba(255,255,255,0.18) inset, 0 -2px 8px 0 rgba(220, 38, 38, 0.18) inset"
+  },
+  beige: {
+    background: `linear-gradient(to bottom, rgb(245, 235, 220), rgb(222, 207, 185))`,
+    boxShadow: `0 2px 8px 0 rgba(180, 155, 125, 0.35), 0 1.5px 0 0 rgba(255,255,255,0.4) inset, 0 -2px 8px 0 rgba(160, 135, 105, 0.3) inset`,
+    textColor: 'text-amber-900',
+    innerShadow: "0 0 0 2px rgba(255,255,255,0.15) inset, 0 1.5px 0 0 rgba(255,255,255,0.25) inset, 0 -2px 8px 0 rgba(160, 135, 105, 0.15) inset"
   }
 };
 
