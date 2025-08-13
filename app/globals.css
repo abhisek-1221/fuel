@@ -4,8 +4,41 @@
 .animate-delay-400 { animation-delay: 0.4s; }
 .animate-delay-600 { animation-delay: 0.6s; }
 .animate-delay-800 { animation-delay: 0.8s; }
+/* Additional animation utilities for landing page */
+.animate-fade-in-up { opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s ease-out forwards; }
+.animate-slide-in-left { opacity: 0; transform: translateX(-30px); animation: slideInLeft 0.8s ease-out forwards; }
+.animate-blur-in { opacity: 0; filter: blur(10px); animation: blurIn 0.8s ease-out forwards; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+.delay-1100 { animation-delay: 1.1s; }
+.delay-1200 { animation-delay: 1.2s; }
 @keyframes fadeIn { to { opacity: 1; } }
 @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInLeft { to { opacity: 1; transform: translateX(0); } }
+@keyframes blurIn { to { opacity: 1; filter: blur(0); } }
+
+.spotlight-bg {
+    background: radial-gradient(ellipse at 50% 40%, rgba(120,80,255,0.30) 0%, rgba(20,20,40,0.90) 70%);
+}
+.card-glass {
+    background: linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(120,80,255,0.13) 100%);
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 8px 32px 0 rgba(40,30,100,0.18), 0 2px 8px 0 rgba(80,80,120,0.10);
+    transition:
+    transform 0.18s cubic-bezier(.22,1,.36,1),
+    box-shadow 0.18s cubic-bezier(.22,1,.36,1);
+    will-change: transform;
+    outline: none;
+}
+.card-glass:focus-visible {
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.38), 0 8px 32px 0 rgba(40,30,100,0.18), 0 2px 8px 0 rgba(80,80,120,0.10);
+}
 
 @tailwind base;
 @tailwind components;
