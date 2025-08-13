@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const heroBackgroundImageUrl =
   "https://pbs.twimg.com/media/GssNsUWX0AA0skP?format=jpg&name=4096x4096";
@@ -12,9 +13,10 @@ const scrollingBackgroundImageUrl =
   "https://pbs.twimg.com/media/GssNsUZWUAAVqZP?format=jpg&name=4096x4096";
 
 export default function LandingPage(): JSX.Element {
+
   return (
-    <main className="w-full bg-black">
-      <section className="relative min-h-screen w-full overflow-hidden">
+    <main className="w-full">
+      <section className="relative min-h-screen w-full overflow-hidden bg-black">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${heroBackgroundImageUrl}')` }}
@@ -127,24 +129,31 @@ export default function LandingPage(): JSX.Element {
                     className="w-0.5 bg-white/70"
                 />
             </div>
-        </div>
-      </section>
 
-      <section className="relative min-h-screen w-full overflow-hidden">
-        <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${scrollingBackgroundImageUrl}')` }}
-            aria-hidden
-        />
-        <div className="absolute inset-0 bg-black/60" aria-hidden />
-        <div className="relative z-10 flex h-screen items-center justify-center">
-            <h2 className="text-4xl font-bold text-white drop-shadow-lg">
-                The Next Section
-            </h2>
+            {/* Join Waitlist Button */}
+            <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+                className="absolute bottom-12 right-12 sm:bottom-12 sm:right-16"
+            >
+                <div className="flex items-center rounded-lg bg-[#F0EBE3] p-1 shadow-2xl">
+                    <Link href="/waitlist">
+                        <motion.button
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
+                        >
+                            JOIN US
+                        </motion.button>
+                    </Link>
+                </div>
+            </motion.div>
         </div>
+
       </section>
     </main>
   );
 }
-
 
