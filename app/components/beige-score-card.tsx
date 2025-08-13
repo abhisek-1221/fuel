@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Trophy, Sparkles, Star, TrendingUp, CheckCircle } from 'lucide-react';
+import { X, Trophy, Star, TrendingUp, CheckCircle, ClipboardClock } from 'lucide-react';
 
 interface BeigeScoreCardProps {
   isOpen: boolean;
@@ -124,7 +124,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
             ) : score === null ? (
               <div className="flex flex-col items-center justify-center py-16">
                 <div className="p-4 rounded-2xl bg-amber-100 mb-4">
-                  <Sparkles className="w-8 h-8 text-amber-600" />
+                  <ClipboardClock className="w-8 h-8 text-amber-600" />
                 </div>
                 <p className="text-amber-800 font-medium text-center">Unable to determine score</p>
               </div>
@@ -146,7 +146,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/30" />
                     <div className="relative z-10">
                       <div className="flex items-center justify-center gap-2 mb-4">
-                        <Sparkles className="w-5 h-5 text-amber-600" />
+                        <ClipboardClock className="w-5 h-5 text-amber-600" />
                         <span className="text-sm font-semibold text-amber-800 uppercase tracking-wide">Score</span>
                       </div>
                       <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-amber-900 mb-2">{score}</div>

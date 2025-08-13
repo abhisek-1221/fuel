@@ -55,7 +55,7 @@ const useVapi = (assistantId: string) => {
             }
             return next;
           });
-        }, 500);
+        }, 1000);
       });
 
       vapi.on("call-end", () => {
