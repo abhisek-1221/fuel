@@ -107,27 +107,26 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
   };
  
   return (
-      <div className='border text-center justify-items-center p-4 rounded-2xl relative'>
+      <div className='border text-center justify-items-center p-3 sm:p-4 rounded-xl sm:rounded-2xl relative w-full max-w-md sm:max-w-lg mx-auto'>
         {/* Show Transcript Button (top-right) */}
         <button
           onClick={openTranscript}
-          className="absolute top-3 right-3 z-20 px-3 py-1.5 rounded-md bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-sm"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-xs sm:text-sm"
           aria-label="Show transcript"
         >
-          Show Transcript
+          <span className="hidden sm:inline">Show Transcript</span>
+          <span className="sm:hidden">Transcript</span>
         </button>
-        <div className="flex items-center justify-center h-full relative" style={{ width: '300px', height: '300px' }}>
+        <div className="flex items-center justify-center h-full relative mx-auto" style={{ width: 'min(280px, calc(100vw - 3rem))', height: 'min(280px, calc(100vw - 3rem))', maxWidth: '300px', maxHeight: '300px' }}>
           { isSessionActive ? 
           <MicOff
-            size={24}
-            className="text-black dark:text-white"
+            className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white"
             onClick={toggleCall}
             style={{ cursor: 'pointer', zIndex: 10 }}
           />
           :
           <Mic
-          size={28}
-          className="text-black dark:text-white"
+          className="w-6 h-6 sm:w-7 sm:h-7 text-black dark:text-white"
           onClick={toggleCall}
           style={{ cursor: 'pointer', zIndex: 10 }}
           />
@@ -162,17 +161,17 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
         
         {/* Live Transcript Display (enlarged, transparent bubbles) */}
         {conversation.length > 0 && (
-          <div className="mt-6 max-h-80 overflow-y-auto">
-            <h3 className="text-base font-semibold mb-3 text-gray-700 dark:text-gray-300">Live Transcript</h3>
-            <div className="space-y-3 text-left">
+          <div className="mt-4 sm:mt-6 max-h-60 sm:max-h-80 overflow-y-auto">
+            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 text-gray-700 dark:text-gray-300">Live Transcript</h3>
+            <div className="space-y-2 sm:space-y-3 text-left">
               {conversation.map((message, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`text-base leading-relaxed ${
-                    message.role === 'user' ? 'ml-8' : 'mr-8'
+                  className={`text-sm sm:text-base leading-relaxed ${
+                    message.role === 'user' ? 'ml-4 sm:ml-8' : 'mr-4 sm:mr-8'
                   } text-gray-900 dark:text-gray-100`}
                 >
                   <span className="font-semibold mr-1">
@@ -190,25 +189,25 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
 
         {/* Transcript Modal */}
         {isTranscriptOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/60" onClick={closeTranscript} />
-            <div className="relative z-10 w-full max-w-3xl mx-4 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-black/10 dark:border-white/10">
-              <div className="flex items-center justify-between p-4 border-b border-black/10 dark:border-white/10">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Conversation Transcript</h2>
+            <div className="relative z-10 w-full max-w-3xl mx-auto bg-white dark:bg-neutral-900 rounded-xl sm:rounded-2xl shadow-2xl border border-black/10 dark:border-white/10 max-h-[90vh] overflow-hidden">
+              <div className="flex items-center justify-between p-3 sm:p-4 border-b border-black/10 dark:border-white/10">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">Conversation Transcript</h2>
                 <button onClick={closeTranscript} aria-label="Close transcript">
                   <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 </button>
               </div>
-              <div className="p-4 max-h-[70vh] overflow-y-auto">
+              <div className="p-3 sm:p-4 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
                 {conversation.length === 0 ? (
-                  <p className="text-gray-600 dark:text-gray-400">No transcript yet.</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">No transcript yet.</p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {conversation.map((message, index) => (
                       <div
                         key={index}
-                        className={`text-base leading-relaxed ${
-                          message.role === 'user' ? 'ml-2' : 'mr-2'
+                        className={`text-sm sm:text-base leading-relaxed ${
+                          message.role === 'user' ? 'ml-1 sm:ml-2' : 'mr-1 sm:mr-2'
                         } text-gray-900 dark:text-gray-100`}
                       >
                         <span className="font-semibold mr-1">
@@ -220,10 +219,10 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
                   </div>
                 )}
               </div>
-              <div className="p-4 border-t border-black/10 dark:border-white/10 flex justify-end">
+              <div className="p-3 sm:p-4 border-t border-black/10 dark:border-white/10 flex justify-end">
                 <button
                   onClick={closeTranscript}
-                  className="px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
+                  className="px-3 sm:px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-sm sm:text-base"
                 >
                   Close
                 </button>
