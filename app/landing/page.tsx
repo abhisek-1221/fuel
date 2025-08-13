@@ -1,159 +1,138 @@
-"use client";
+'use client';
+import Image from 'next/image';
+import {
+  ArrowRight,
+  Menu,
+  TrendingUp,
+  Mic
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
-import { motion } from "framer-motion";
-import React, { useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+const imageData = [
+  {
+    src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
+    text: 'Nova Flame — Express your burning desire',
+  },
+  {
+    src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
+    text: 'Bob — Your ally against office monotony.',
+  },
+  {
+    src: 'https://pbs.twimg.com/media/GvQpuoBXAAAupU-?format=jpg&name=medium',
+    text: 'Prodigy Paws — The smartest cat in school',
+  },
+];
 
-const heroBackgroundImageUrl =
-  "https://pbs.twimg.com/media/GssNsUWX0AA0skP?format=jpg&name=4096x4096";
+export default function Home() {
+  const [currentImage, setCurrentImage] = useState(0);
 
-const scrollingBackgroundImageUrl = 
-  "https://pbs.twimg.com/media/GssNsUZWUAAVqZP?format=jpg&name=4096x4096";
-
-export default function LandingPage(): JSX.Element {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % imageData.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <main className="w-full">
-      <section className="relative min-h-screen w-full overflow-hidden bg-black">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${heroBackgroundImageUrl}')` }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-black/40" aria-hidden />
-
-        <div className="relative z-10 min-h-screen w-full">
-            {/* Top-left L-shaped corner */}
-            <div className="pointer-events-none absolute left-6 top-6 sm:left-10 sm:top-10 flex flex-col">
-                <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "6rem" }}
-                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
-                    className="h-0.5 bg-white/70"
-                />
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "6rem" }}
-                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
-                    className="w-0.5 bg-white/70"
-                />
+    <>
+      <div
+        className="fixed top-0 w-full h-screen bg-cover bg-center -z-10"
+        style={{
+          backgroundImage:
+            'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
+        }}
+      ></div>
+      <header className="py-6 animate-fade-in">
+        <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
+          <a
+            href="#"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
+            <div className="w-8 h-8 bg-gradient-to-br rounded-full flex items-center justify-center from-black to-gray-700">
+              <TrendingUp className="w-4 h-4 text-white" /> 
             </div>
+            <span className="font-semibold text-lg tracking-tight font-sans">
+              Feul.AI
+            </span>
+          </a>
 
-            {/* Top-right L-shaped corner */}
-            <div className="pointer-events-none absolute right-6 top-6 sm:right-10 sm:top-10 flex flex-col items-end">
-                <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "6rem" }}
-                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
-                    className="h-0.5 bg-white/70"
-                />
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "6rem" }}
-                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
-                    className="w-0.5 bg-white/70"
-                />
-            </div>
-            
-            <motion.div
-            initial={{ opacity: 0, x: -60, y: -20 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="absolute left-20 top-10"
-            >
-            <Link href="/" className="flex items-center gap-3">
-                <Image
-                src="/fll.png"
-                alt="Feul.AI Logo"
-                width={144}
-                height={144}
-                className="h-36 w-36 rounded-full"
-                />
-            </Link>
-            </motion.div>
-            {/* Top-right headline */}
-            <div className="pointer-events-none absolute right-12 top-12 sm:right-20 sm:top-20 max-w-xl md:max-w-2xl">
-            <motion.h1
-                initial={{ opacity: 0, x: 60, y: -20 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-                className="text-right font-semibold leading-[1.05] tracking-tight text-white drop-shadow-lg text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-            >
-                You are the source. <span className="italic">Feul</span> is your refinery.
-            </motion.h1>
-            </div>
-
-            {/* Bottom-left subheadline */}
-            <div className="pointer-events-none absolute bottom-12 left-12 sm:bottom-20 sm:left-20 max-w-3xl">
-            <motion.p
-                initial={{ opacity: 0, x: -60, y: 20 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                className="text-pretty text-white/90 drop-shadow-lg text-lg sm:text-xl md:text-2xl lg:text-3xl"
-            >
-                Your data is the invisible engine behind AI’s growth. Feul turns that invisible
-                force into tangible rewards because you built this future
-            </motion.p>
-            </div>
-
-            {/* Bottom-left L-shaped corner */}
-            <div className="pointer-events-none absolute bottom-6 left-6 sm:bottom-10 sm:left-10 flex flex-col-reverse">
-                <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: '6rem' }}
-                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
-                    className="h-0.5 bg-white/70"
-                />
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: '6rem' }}
-                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
-                    className="w-0.5 bg-white/70"
-                />
-            </div>
-
-            {/* Bottom-right L-shaped corner */}
-            <div className="pointer-events-none absolute bottom-6 right-6 sm:right-10 sm:right-10 flex flex-col-reverse items-end">
-                <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: '6rem' }}
-                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
-                    className="h-0.5 bg-white/70"
-                />
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: '6rem' }}
-                    transition={{ duration: 0.5, ease: 'easeOut', delay: 0.5 }}
-                    className="w-0.5 bg-white/70"
-                />
-            </div>
-
-            {/* Join Waitlist Button */}
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-                className="absolute bottom-12 right-12 sm:bottom-12 sm:right-16"
-            >
-                <div className="flex items-center rounded-lg bg-[#F0EBE3] p-1 shadow-2xl">
-                    <Link href="/waitlist">
-                        <motion.button
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
-                        >
-                            JOIN US
-                        </motion.button>
-                    </Link>
-                </div>
-            </motion.div>
+          <button className="md:hidden p-2 rounded-lg transition-colors hover:bg-white/20">
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
+      </header>
 
-      </section>
-    </main>
+      <main className="">
+        <section className="mx-auto max-w-7xl px-6 pb-20">
+          <div className="md:rounded-3xl md:p-16 lg:p-24 overflow-hidden bg-white/50 rounded-b-3xl pt-8 pr-8 pb-8 pl-8 shadow-[rgba(255,_255,_255,_0.1)_0px_1px_1px_0px_inset,_rgba(50,_50,_93,_0.25)_0px_50px_100px_-20px,_rgba(0,_0,_0,_0.3)_0px_30px_60px_-30px] backdrop-blur-md">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="">
+                <h1 className="sm:text-5xl lg:text-7xl leading-tight animate-slide-up animate-delay-200 text-4xl font-medium tracking-tight font-manrope mt-2 mr-2 mb-2 ml-2">
+                  Shape AGI and Earn Rewards.
+                  <br className="hidden sm:block" />
+                </h1>
+
+                <p className="sm:text-lg max-w-xl animate-slide-up animate-delay-400 text-base mt-6 font-sans text-gray-600">
+                  Take part in short voice challenges with unique AI personas. Your words help forge the path to Artificial General Intelligence and you earn while doing it.
+                </p>
+
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-600">
+                  <Link href="/waitlist">
+                    <button
+                      className="inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 font-medium text-black bg-gradient-to-br from-yellow-50 via-amber-50 to-stone-200 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-lg border-t border-white/50"
+                    >
+                      Join Waitlist
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </Link>
+                </div>
+
+                <div className="mt-12 flex items-center gap-8 animate-slide-up animate-delay-800">
+                  <p className="text-sm font-medium font-sans italic">
+                    Every conversation is a step toward the next frontier of intelligence.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative animate-slide-up animate-delay-400">
+                <div className="relative rounded-3xl overflow-hidden h-80 sm:h-[28rem] shadow-2xl">
+                  <AnimatePresence>
+                    <motion.div
+                      key={currentImage}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1 }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={imageData[currentImage].src}
+                        alt="AI Persona"
+                        className="absolute inset-0 w-full h-full object-cover"
+                        width={800}
+                        height={448}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent from-black/60"></div>
+                  <div className="absolute top-4 left-4 text-white">
+  
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 right-4">
+                        <button className="w-full text-black font-semibold rounded-full bg-gradient-to-br from-yellow-50 via-amber-50 to-stone-200 px-6 py-3 text-center shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border-t border-white/50">
+                            <Mic className="w-5 h-5" />
+                            {imageData[currentImage].text}
+                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+      </main>
+    </>
   );
 }
-
