@@ -97,16 +97,16 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
         </motion.div>
       </div>
 
-      {/* Large Centered Countdown */}
+      {/* Centered Countdown */}
       {sessionActive && secondsLeft !== null && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-20 w-64 sm:w-80">
-          <div className="px-6 py-3 rounded-2xl bg-black/60 dark:bg-neutral-900/70 backdrop-blur-md border border-white/10 shadow-2xl flex items-baseline justify-center">
-            <span className="text-6xl sm:text-7xl font-extrabold tracking-tight text-white leading-none">{secondsLeft}</span>
-            <span className="ml-2 text-white/80 text-xl sm:text-2xl leading-none">s</span>
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64">
+          <div className="px-4 py-2 rounded-xl bg-[#e6d5c1] border border-amber-900/20 shadow-lg flex items-baseline justify-center">
+            <span className="text-4xl sm:text-5xl font-bold tracking-tight text-amber-900 leading-none">{secondsLeft}</span>
+            <span className="ml-2 text-amber-800/80 text-lg sm:text-xl leading-none">s</span>
           </div>
-          <div className="mt-3 h-1.5 rounded-full overflow-hidden bg-white/20">
+          <div className="mt-2 h-1 rounded-full overflow-hidden bg-amber-900/10">
             <div
-              className="h-full bg-white/90 transition-[width] duration-1000 ease-linear"
+              className="h-full bg-amber-800/60 transition-[width] duration-1000 ease-linear"
               style={{ width: `${Math.max(0, Math.min(100, (secondsLeft / 10) * 100))}%` }}
             />
           </div>

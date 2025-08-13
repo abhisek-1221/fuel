@@ -30,6 +30,7 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
   const [summary, setSummary] = useState<string>('');
   const [strengths, setStrengths] = useState<string[]>([]);
   const [improvements, setImprovements] = useState<string[]>([]);
+  const autoScoreTriggeredRef = useRef(false);
  
   useEffect(() => {
     if (isSessionActive) {
@@ -57,6 +58,26 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
     onCountdownChange?.(remainingSeconds, isSessionActive);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remainingSeconds, isSessionActive]);
+
+  // Reset auto-score trigger when a new session starts
+  useEffect(() => {
+    if (isSessionActive) {
+      autoScoreTriggeredRef.current = false;
+    }
+  }, [isSessionActive]);
+
+  // Auto score when countdown completes and call has ended
+  useEffect(() => {
+    if (
+      remainingSeconds === 0 &&
+      !isSessionActive &&
+      !autoScoreTriggeredRef.current &&
+      conversation.length > 0
+    ) {
+      autoScoreTriggeredRef.current = true;
+      requestScore();
+    }
+  }, [remainingSeconds, isSessionActive, conversation.length]);
 
   const openTranscript = () => {
     console.log('Transcript modal opened. Full transcript:', conversation);
