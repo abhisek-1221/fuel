@@ -14,10 +14,11 @@ interface RadialCardProps {
   assistantId: string;
   questTitle: string;
   onCanScoreChange?: (canScore: boolean) => void;
+  onCountdownChange?: (seconds: number | null, isActive: boolean) => void;
 }
 
-const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange }, ref) => {
-  const { volumeLevel, isSessionActive, toggleCall, conversation } = useVapi(assistantId);
+const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange, onCountdownChange }, ref) => {
+  const { volumeLevel, isSessionActive, toggleCall, conversation, remainingSeconds } = useVapi(assistantId);
   const [bars, setBars] = useState(Array(50).fill(0));
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const liveTranscriptEndRef = useRef<HTMLDivElement | null>(null);
@@ -50,6 +51,12 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
   useEffect(() => {
     liveTranscriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
+
+  // Notify parent about countdown updates
+  useEffect(() => {
+    onCountdownChange?.(remainingSeconds, isSessionActive);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remainingSeconds, isSessionActive]);
 
   const openTranscript = () => {
     console.log('Transcript modal opened. Full transcript:', conversation);

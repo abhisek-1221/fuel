@@ -18,6 +18,8 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
 }) => {
   const radialRef = React.useRef<RadialCardHandle | null>(null);
   const [canScore, setCanScore] = React.useState(false);
+  const [secondsLeft, setSecondsLeft] = React.useState<number | null>(null);
+  const [sessionActive, setSessionActive] = React.useState(false);
   const getQuestColor = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
@@ -87,9 +89,29 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
             assistantId={assistantId} 
             questTitle={questTitle}
             onCanScoreChange={setCanScore}
+            onCountdownChange={(seconds, isActive) => {
+              setSecondsLeft(seconds);
+              setSessionActive(isActive);
+            }}
           />
         </motion.div>
       </div>
+
+      {/* Large Centered Countdown */}
+      {sessionActive && secondsLeft !== null && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-20 w-64 sm:w-80">
+          <div className="px-6 py-3 rounded-2xl bg-black/60 dark:bg-neutral-900/70 backdrop-blur-md border border-white/10 shadow-2xl flex items-baseline justify-center">
+            <span className="text-6xl sm:text-7xl font-extrabold tracking-tight text-white leading-none">{secondsLeft}</span>
+            <span className="ml-2 text-white/80 text-xl sm:text-2xl leading-none">s</span>
+          </div>
+          <div className="mt-3 h-1.5 rounded-full overflow-hidden bg-white/20">
+            <div
+              className="h-full bg-white/90 transition-[width] duration-1000 ease-linear"
+              style={{ width: `${Math.max(0, Math.min(100, (secondsLeft / 10) * 100))}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <div className="relative z-10 p-4 sm:p-6">

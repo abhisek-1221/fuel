@@ -14,8 +14,17 @@ const useVapi = (assistantId: string) => {
   const [connected, setConnected] = useState(false);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
 
   const vapiRef = useRef<Vapi | null>(null);
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearCountdown = useCallback(() => {
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+  }, []);
 
   const initializeVapi = useCallback(() => {
     if (!vapiRef.current && publicKey) {
@@ -29,6 +38,24 @@ const useVapi = (assistantId: string) => {
         setIsSessionActive(true);
         setError(null);
         console.log("Call started");
+
+        // Start 10s countdown
+        clearCountdown();
+        setRemainingSeconds(10);
+        countdownIntervalRef.current = setInterval(() => {
+          setRemainingSeconds((prev) => {
+            if (prev === null) return null;
+            const next = prev - 1;
+            if (next <= 0) {
+              // Auto-end call at 0
+              if (vapiRef.current) {
+                vapiRef.current.stop();
+              }
+              return 0;
+            }
+            return next;
+          });
+        }, 500);
       });
 
       vapi.on("call-end", () => {
@@ -37,6 +64,8 @@ const useVapi = (assistantId: string) => {
         setIsSessionActive(false);
         setAssistantIsSpeaking(false);
         setVolumeLevel(0);
+        clearCountdown();
+        setRemainingSeconds(0);
         console.log("Call ended");
       });
 
@@ -90,8 +119,9 @@ const useVapi = (assistantId: string) => {
         vapiRef.current.stop();
         vapiRef.current = null;
       }
+      clearCountdown();
     };
-  }, [initializeVapi]);
+  }, [initializeVapi, clearCountdown]);
 
   const startCall = useCallback(async () => {
     if (!vapiRef.current || !assistantId) {
@@ -153,6 +183,7 @@ const useVapi = (assistantId: string) => {
     connected,
     assistantIsSpeaking,
     error,
+    remainingSeconds,
     startCall,
     endCall,
     toggleCall,
