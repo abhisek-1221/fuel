@@ -48,11 +48,11 @@ export default function Test() {
     <>
       {/* Background */}
       <div
-        className="fixed top-0 w-full h-screen bg-white bg-center -z-10"
-        style={{
-          backgroundImage:
-            'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
-        }}
+        className="fixed top-0 w-full h-screen bg-gradient-to-br from-amber-50 to-orange-100 bg-center -z-10"
+        // style={{
+        //   backgroundImage:
+        //     'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
+        // }}
       />  
       
       <AnimatePresence mode="wait">

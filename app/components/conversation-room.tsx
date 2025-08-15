@@ -211,7 +211,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
 
       {/* Background Gradient Overlay */}
       <div 
-        className={`fixed inset-0 bg-gradient-to-br ${getQuestColor(questTitle)} -z-10`}
+        className="fixed inset-0 bg-gradient-to-br from-amber-50 to-orange-100 -z-10"
       />
 
       {/* Main Content */}
