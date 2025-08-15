@@ -117,7 +117,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
       <div className="relative z-10 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
           <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left order-2 sm:order-1">
-            Tap the microphone to start your conversation with {questTitle}
+            Tap the microphone to start your conversation
           </p>
           <div className="order-1 sm:order-2">
             <GradientButton

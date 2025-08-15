@@ -136,15 +136,6 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
  
   return (
       <div className='border text-center justify-items-center p-3 sm:p-4 rounded-xl sm:rounded-2xl relative w-full max-w-md sm:max-w-lg mx-auto'>
-        {/* Show Transcript Button (top-right) */}
-        <button
-          onClick={openTranscript}
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-xs sm:text-sm"
-          aria-label="Show transcript"
-        >
-          <span className="hidden sm:inline">Show Transcript</span>
-          <span className="sm:hidden">Transcript</span>
-        </button>
         <div className="flex items-center justify-center h-full relative mx-auto" style={{ width: 'min(280px, calc(100vw - 3rem))', height: 'min(280px, calc(100vw - 3rem))', maxWidth: '300px', maxHeight: '300px' }}>
           { isSessionActive ? 
           <MicOff
@@ -296,5 +287,3 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
 });
  
 export default RadialCard;
-
-
