@@ -15,10 +15,11 @@ interface RadialCardProps {
   questTitle: string;
   onCanScoreChange?: (canScore: boolean) => void;
   onCountdownChange?: (seconds: number | null, isActive: boolean) => void;
+  onInitiatingChange?: (isInitiating: boolean) => void;
 }
 
-const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange, onCountdownChange }, ref) => {
-  const { volumeLevel, isSessionActive, toggleCall, conversation, remainingSeconds } = useVapi(assistantId);
+const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange, onCountdownChange, onInitiatingChange }, ref) => {
+  const { volumeLevel, isSessionActive, toggleCall, conversation, remainingSeconds, connecting, assistantIsSpeaking } = useVapi(assistantId);
   const [bars, setBars] = useState(Array(50).fill(0));
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const liveTranscriptEndRef = useRef<HTMLDivElement | null>(null);
@@ -31,6 +32,9 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
   const [strengths, setStrengths] = useState<string[]>([]);
   const [improvements, setImprovements] = useState<string[]>([]);
   const autoScoreTriggeredRef = useRef(false);
+  
+  // Track if we're in the loading state (connecting but assistant hasn't started speaking yet)
+  const isInitiating = connecting || (isSessionActive && !assistantIsSpeaking && conversation.length === 0);
  
   useEffect(() => {
     if (isSessionActive) {
@@ -125,6 +129,12 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
     onCanScoreChange?.(getCanScore());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSessionActive, conversation.length, isScoring]);
+
+  // Notify parent about initiating state changes
+  useEffect(() => {
+    onInitiatingChange?.(isInitiating);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInitiating]);
  
   const updateBars = (volume: number) => {
     setBars(bars.map(() => Math.random() * volume * 50));
@@ -136,29 +146,24 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
  
   return (
       <div className='border text-center justify-items-center p-3 sm:p-4 rounded-xl sm:rounded-2xl relative w-full max-w-md sm:max-w-lg mx-auto'>
-        {/* Show Transcript Button (top-right) */}
-        <button
-          onClick={openTranscript}
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition text-xs sm:text-sm"
-          aria-label="Show transcript"
-        >
-          <span className="hidden sm:inline">Show Transcript</span>
-          <span className="sm:hidden">Transcript</span>
-        </button>
         <div className="flex items-center justify-center h-full relative mx-auto" style={{ width: 'min(280px, calc(100vw - 3rem))', height: 'min(280px, calc(100vw - 3rem))', maxWidth: '300px', maxHeight: '300px' }}>
-          { isSessionActive ? 
-          <MicOff
-            className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white"
-            onClick={toggleCall}
-            style={{ cursor: 'pointer', zIndex: 10 }}
-          />
-          :
-          <Mic
-          className="w-6 h-6 sm:w-7 sm:h-7 text-black dark:text-white"
-          onClick={toggleCall}
-          style={{ cursor: 'pointer', zIndex: 10 }}
-          />
-          }
+          {isInitiating ? (
+            <div className="flex flex-col items-center justify-center z-10">
+              <Loader2 className="w-6 h-6 sm:w-7 sm:h-7 text-black dark:text-white animate-spin mb-2" />
+            </div>
+          ) : isSessionActive ? (
+            <MicOff
+              className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white"
+              onClick={toggleCall}
+              style={{ cursor: 'pointer', zIndex: 10 }}
+            />
+          ) : (
+            <Mic
+              className="w-6 h-6 sm:w-7 sm:h-7 text-black dark:text-white"
+              onClick={toggleCall}
+              style={{ cursor: 'pointer', zIndex: 10 }}
+            />
+          )}
           <svg width="100%" height="100%" viewBox="0 0 300 300" style={{ position: 'absolute', top: 0, left: 0 }}>
             {bars.map((height, index) => {
               const angle = (index / bars.length) * 360;
@@ -296,5 +301,3 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
 });
  
 export default RadialCard;
-
-

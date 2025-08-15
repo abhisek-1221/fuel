@@ -30,19 +30,19 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
 
   const getPerformanceLevel = (score: number | null) => {
     if (!score) return 'Unrated';
-    if (score >= 450) return 'Exceptional';
-    if (score >= 400) return 'Excellent';
-    if (score >= 350) return 'Good';
-    if (score >= 300) return 'Fair';
+    if (score >= 90) return 'Exceptional';
+    if (score >= 75) return 'Excellent';
+    if (score >= 60) return 'Good';
+    if (score >= 50) return 'Fair';
     return 'Needs Improvement';
   };
 
   const getPerformanceColor = (score: number | null) => {
     if (!score) return 'text-amber-600';
-    if (score >= 450) return 'text-emerald-600';
-    if (score >= 400) return 'text-green-600';
-    if (score >= 350) return 'text-amber-600';
-    if (score >= 300) return 'text-orange-600';
+    if (score >= 90) return 'text-emerald-600';
+    if (score >= 75) return 'text-green-600';
+    if (score >= 60) return 'text-amber-600';
+    if (score >= 50) return 'text-orange-600';
     return 'text-red-600';
   };
 
@@ -150,7 +150,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                         <span className="text-sm font-semibold text-amber-800 uppercase tracking-wide">Score</span>
                       </div>
                       <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-amber-900 mb-2">{score}</div>
-                      <p className="text-xs sm:text-sm text-amber-700 mb-4">out of 500</p>
+                      <p className="text-xs sm:text-sm text-amber-700 mb-4">out of 100</p>
                       <div className={`text-base sm:text-lg font-semibold mb-4 sm:mb-6 ${getPerformanceColor(score)}`}>
                         {getPerformanceLevel(score)}
                       </div>
@@ -161,19 +161,19 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                           <motion.div 
                             className="h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full"
                             initial={{ width: 0 }}
-                            animate={{ width: `${Math.max(0, Math.min(100, (score / 500) * 100))}%` }}
+                            animate={{ width: `${Math.max(0, Math.min(100, score))}%` }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
                           />
                         </div>
                         <p className="text-xs text-amber-700 mt-2">
-                          {Math.round((score / 500) * 100)}% of maximum score
+                          {Math.round(score)}% of maximum score
                         </p>
                       </div>
                       
                       {/* Stars */}
                       <div className="flex items-center justify-center gap-1">
                         {Array.from({ length: 5 }).map((_, i) => {
-                          const filled = (stars ?? Math.round(score / 100)) > i;
+                          const filled = (stars ?? Math.round(score / 20)) > i;
                           return (
                             <motion.div
                               key={i}

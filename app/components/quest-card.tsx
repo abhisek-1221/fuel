@@ -8,41 +8,31 @@ interface QuestCardProps {
   title: string;
   assistantId: string;
   description: string;
+  questCardImageUrl: string;
   onClick: () => void;
 }
 
-const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, onClick }) => {
-  const getImageAndText = (title: string) => {
+const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, questCardImageUrl, onClick }) => {
+  const getAssistantText = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
-        return {
-          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
-          text: 'Nova Flame — Express your burning desire'
-        };
+      case "forgot girlfriend's birthday":
+        return 'Nova Flame — Express your burning desire';
       case 'waiter':
-        return {
-          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
-          text: 'Bob — Your ally against office monotony'
-        };
+      case 'hr interview':
+        return 'Bob — Your ally against office monotony';
       case 'customer':
-        return {
-          src: 'https://pbs.twimg.com/media/GvQpuoBXAAAupU-?format=jpg&name=medium',
-          text: 'Prodigy Paws — The smartest cat in school'
-        };
+      case 'veg customer':
+        return 'Prodigy Paws — The smartest cat in school';
       case 'luggage':
-        return {
-          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
-          text: 'Bob — Your travel companion'
-        };
+      case 'lost luggage':
+        return 'Bob — Your travel companion';
       default:
-        return {
-          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
-          text: 'Nova Flame — Express your burning desire'
-        };
+        return 'AI Assistant — Your companion';
     }
   };
 
-  const imageData = getImageAndText(title);
+  const assistantText = getAssistantText(title);
 
   return (
     <motion.div
@@ -55,7 +45,7 @@ const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, 
       transition={{ duration: 0.3 }}
     >
       <Image
-        src={imageData.src}
+        src={questCardImageUrl}
         alt={title}
         className="absolute inset-0 w-full h-full object-cover"
         width={800}
@@ -63,11 +53,6 @@ const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, 
       />
       
       <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent from-black/60"></div>
-      
-      <div className="absolute top-4 left-4 text-white">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="text-sm text-white/80 mt-1">{description}</p>
-      </div>
 
       <div className="absolute bottom-4 left-4 right-4">
         <motion.button 
@@ -76,7 +61,7 @@ const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, 
           whileTap={{ scale: 0.95 }}
         >
           <Mic className="w-5 h-5" />
-          Start {title} Quest
+          {title}
         </motion.button>
       </div>
     </motion.div>

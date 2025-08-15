@@ -3,35 +3,16 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuestCard from "../components/quest-card";
 import ConversationRoom from "../components/conversation-room";
+import { quests } from "../../lib/questdata";
 
 interface Quest {
   title: string;
   assistantId: string;
   description: string;
+  narrationAudioUrl: string;
+  questCardImageUrl: string;
+  scoringAlgorithmPrompt: string;
 }
-
-const quests: Quest[] = [
-  {
-    title: "Girlfriend",
-    assistantId: "5fa87ca6-ab9a-45d9-8772-9dcb651ecdc4",
-    description: "Have a heartfelt conversation with your AI girlfriend companion"
-  },
-  {
-    title: "Waiter",
-    assistantId: "f9229d73-e9f4-4aaa-b65a-80aaceea1c33",
-    description: "Order your favorite meal from our friendly AI waiter"
-  },
-  {
-    title: "Customer",
-    assistantId: "ef9eb4ea-a942-4738-84e6-8ffb1a217b8c",
-    description: "Engage with an AI customer for service training scenarios"
-  },
-  {
-    title: "Luggage",
-    assistantId: "10a36fd6-7031-49da-8e5d-fc5961edf9ae",
-    description: "Get help with your luggage and travel assistance"
-  }
-];
 
 export default function Test() {
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
@@ -48,11 +29,11 @@ export default function Test() {
     <>
       {/* Background */}
       <div
-        className="fixed top-0 w-full h-screen bg-white bg-center -z-10"
-        style={{
-          backgroundImage:
-            'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
-        }}
+        className="fixed top-0 w-full h-screen bg-gradient-to-br from-amber-50 to-orange-100 bg-center -z-10"
+        // style={{
+        //   backgroundImage:
+        //     'url("https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc48PBPvHHWacf6vk90KYTnzGr4V8ug7NEwmqO")',
+        // }}
       />  
       
       <AnimatePresence mode="wait">
@@ -72,7 +53,7 @@ export default function Test() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <h1 className="text-4xl font-bold text-white mb-4">Choose Your Quest</h1>
+              <h1 className="text-4xl font-bold text-black mb-4">Choose Your Quest</h1>
               <p className="text-lg text-white/70">Select an AI assistant to start your adventure</p>
             </motion.div>
 
@@ -89,6 +70,7 @@ export default function Test() {
                     title={quest.title}
                     assistantId={quest.assistantId}
                     description={quest.description}
+                    questCardImageUrl={quest.questCardImageUrl}
                     onClick={() => handleQuestSelect(quest)}
                   />
                 </motion.div>
@@ -106,6 +88,7 @@ export default function Test() {
             <ConversationRoom
               questTitle={selectedQuest.title}
               assistantId={selectedQuest.assistantId}
+              narrationAudioUrl={selectedQuest.narrationAudioUrl}
               onBack={handleBackToQuests}
             />
           </motion.div>
