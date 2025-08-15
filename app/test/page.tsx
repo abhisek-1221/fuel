@@ -12,24 +12,24 @@ interface Quest {
 
 const quests: Quest[] = [
   {
-    title: "Girlfriend",
+    title: "Forgot Girlfriend’s Birthday",
     assistantId: "5fa87ca6-ab9a-45d9-8772-9dcb651ecdc4",
-    description: "Have a heartfelt conversation with your AI girlfriend companion"
+    description: "Forgot Girlfriend’s Birthday"
   },
   {
-    title: "Waiter",
+    title: "HR Interview",
     assistantId: "f9229d73-e9f4-4aaa-b65a-80aaceea1c33",
-    description: "Order your favorite meal from our friendly AI waiter"
+    description: "Interview for a job with HR"
   },
   {
-    title: "Customer",
+    title: "Veg Customer",
     assistantId: "ef9eb4ea-a942-4738-84e6-8ffb1a217b8c",
-    description: "Engage with an AI customer for service training scenarios"
+    description: "Non Veg Dish served to vegetarian customer"
   },
   {
-    title: "Luggage",
+    title: "Lost Luggage",
     assistantId: "10a36fd6-7031-49da-8e5d-fc5961edf9ae",
-    description: "Get help with your luggage and travel assistance"
+    description: "Passenger who lost their bag"
   }
 ];
 
@@ -72,7 +72,7 @@ export default function Test() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <h1 className="text-4xl font-bold text-white mb-4">Choose Your Quest</h1>
+              <h1 className="text-4xl font-bold text-black mb-4">Choose Your Quest</h1>
               <p className="text-lg text-white/70">Select an AI assistant to start your adventure</p>
             </motion.div>
 
