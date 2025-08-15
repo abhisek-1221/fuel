@@ -20,15 +20,20 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
   const [canScore, setCanScore] = React.useState(false);
   const [secondsLeft, setSecondsLeft] = React.useState<number | null>(null);
   const [sessionActive, setSessionActive] = React.useState(false);
+  const [isInitiating, setIsInitiating] = React.useState(false);
   const getQuestColor = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
+      case "forgot girlfriend's birthday":
         return 'from-pink-500/10 to-purple-500/10';
       case 'waiter':
+      case 'hr interview':
         return 'from-orange-500/10 to-red-500/10';
       case 'customer':
+      case 'veg customer':
         return 'from-blue-500/10 to-cyan-500/10';
       case 'luggage':
+      case 'lost luggage':
         return 'from-green-500/10 to-emerald-500/10';
       default:
         return 'from-gray-500/10 to-slate-500/10';
@@ -63,8 +68,10 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           </motion.div>
           
           <div className="text-center flex-1 mx-4">
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white">{questTitle} Quest</h1>
-            <p className="text-xs sm:text-sm text-white/70 mt-1">AI Assistant Conversation</p>
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
+            <p className="text-xs sm:text-sm text-black/70 mt-1">
+              {isInitiating ? "Initializing quest..." : "Click on Microphone to start conversation"}
+            </p>
           </div>
           
           <div className="w-16 sm:w-32" /> {/* Spacer for centering */}
@@ -93,6 +100,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
               setSecondsLeft(seconds);
               setSessionActive(isActive);
             }}
+            onInitiatingChange={setIsInitiating}
           />
         </motion.div>
       </div>
@@ -116,9 +124,6 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
       {/* Footer */}
       <div className="relative z-10 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left order-2 sm:order-1">
-            Tap the microphone to start your conversation
-          </p>
           <div className="order-1 sm:order-2">
             <GradientButton
               onClick={() => radialRef.current?.requestScore()}
