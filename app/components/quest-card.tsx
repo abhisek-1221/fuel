@@ -8,45 +8,31 @@ interface QuestCardProps {
   title: string;
   assistantId: string;
   description: string;
+  questCardImageUrl: string;
   onClick: () => void;
 }
 
-const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, onClick }) => {
-  const getImageAndText = (title: string) => {
+const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, questCardImageUrl, onClick }) => {
+  const getAssistantText = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
       case "forgot girlfriend's birthday":
-        return {
-          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
-          text: 'Nova Flame — Express your burning desire'
-        };
+        return 'Nova Flame — Express your burning desire';
       case 'waiter':
       case 'hr interview':
-        return {
-          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
-          text: 'Bob — Your ally against office monotony'
-        };
+        return 'Bob — Your ally against office monotony';
       case 'customer':
       case 'veg customer':
-        return {
-          src: 'https://pbs.twimg.com/media/GvQpuoBXAAAupU-?format=jpg&name=medium',
-          text: 'Prodigy Paws — The smartest cat in school'
-        };
+        return 'Prodigy Paws — The smartest cat in school';
       case 'luggage':
       case 'lost luggage':
-        return {
-          src: 'https://pbs.twimg.com/media/GvReA8SagAAnbeJ?format=jpg&name=large',
-          text: 'Bob — Your travel companion'
-        };
+        return 'Bob — Your travel companion';
       default:
-        return {
-          src: 'https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcJ2l1TpGqxZr2j6RGhIKykf0dLS49gePNvWAs',
-          text: 'Nova Flame — Express your burning desire'
-        };
+        return 'AI Assistant — Your companion';
     }
   };
 
-  const imageData = getImageAndText(title);
+  const assistantText = getAssistantText(title);
 
   return (
     <motion.div
@@ -59,7 +45,7 @@ const QuestCard: React.FC<QuestCardProps> = ({ title, assistantId, description, 
       transition={{ duration: 0.3 }}
     >
       <Image
-        src={imageData.src}
+        src={questCardImageUrl}
         alt={title}
         className="absolute inset-0 w-full h-full object-cover"
         width={800}

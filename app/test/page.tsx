@@ -3,35 +3,16 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuestCard from "../components/quest-card";
 import ConversationRoom from "../components/conversation-room";
+import { quests } from "../../lib/questdata";
 
 interface Quest {
   title: string;
   assistantId: string;
   description: string;
+  narrationAudioUrl: string;
+  questCardImageUrl: string;
+  scoringAlgorithmPrompt: string;
 }
-
-const quests: Quest[] = [
-  {
-    title: "Forgot Girlfriend’s Birthday",
-    assistantId: "5fa87ca6-ab9a-45d9-8772-9dcb651ecdc4",
-    description: "Forgot Girlfriend’s Birthday"
-  },
-  {
-    title: "HR Interview",
-    assistantId: "f9229d73-e9f4-4aaa-b65a-80aaceea1c33",
-    description: "Interview for a job with HR"
-  },
-  {
-    title: "Veg Customer",
-    assistantId: "ef9eb4ea-a942-4738-84e6-8ffb1a217b8c",
-    description: "Non Veg Dish served to vegetarian customer"
-  },
-  {
-    title: "Lost Luggage",
-    assistantId: "10a36fd6-7031-49da-8e5d-fc5961edf9ae",
-    description: "Passenger who lost their bag"
-  }
-];
 
 export default function Test() {
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
@@ -89,6 +70,7 @@ export default function Test() {
                     title={quest.title}
                     assistantId={quest.assistantId}
                     description={quest.description}
+                    questCardImageUrl={quest.questCardImageUrl}
                     onClick={() => handleQuestSelect(quest)}
                   />
                 </motion.div>
@@ -106,6 +88,7 @@ export default function Test() {
             <ConversationRoom
               questTitle={selectedQuest.title}
               assistantId={selectedQuest.assistantId}
+              narrationAudioUrl={selectedQuest.narrationAudioUrl}
               onBack={handleBackToQuests}
             />
           </motion.div>

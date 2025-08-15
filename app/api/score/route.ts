@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
+import { quests } from '../../../lib/questdata';
 
 type ConversationEntry = { role: string; text: string };
 
@@ -28,22 +29,28 @@ export async function POST(req: Request) {
       .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.text}`)
       .join('\n');
 
+    // Find the quest and use its scoring algorithm
+    const quest = questTitle ? quests.find(q => q.title === questTitle) : null;
+    const scoringPrompt = quest?.scoringAlgorithmPrompt || '';
+    
     const scenario = questTitle ? `Scenario: ${questTitle}.` : '';
 
     const instruction = `You are a strict evaluator for spoken role-play practice. ${scenario} Read the conversation transcript between the user and the assistant. Evaluate how well the USER handled the situation.
 
+${scoringPrompt ? `Use this detailed scoring rubric:\n${scoringPrompt}\n\n` : ''}
+
 Return STRICT JSON with the following shape and nothing else:
 {
-  "score": number,            // integer 0..500
+  "score": number,            // integer 0..100 (based on the rubric above)
   "stars": number,            // integer 1..5 (derived from score)
   "summary": string,          // 1-2 sentences summary of performance
   "strengths": string[],      // 3 short bullet points
   "improvements": string[]    // 3 concise suggestions
 }
 
-Scoring guidance (0..500):
+${!scoringPrompt ? `Scoring guidance (0..100):
 - clarity/coherence, politeness/tone, goal completion/appropriateness, naturalness/responsiveness.
-- If unsure, estimate conservatively.
+- If unsure, estimate conservatively.` : ''}
 `;
 
     const prompt = `${instruction}\n\nTranscript:\n${conversationText}\n\nJSON:`;
@@ -73,8 +80,8 @@ Scoring guidance (0..500):
 
     let score = Number.isFinite(data.score) ? Math.round(Number(data.score)) : 0;
     if (score < 0) score = 0;
-    if (score > 500) score = 500;
-    let stars = Number.isFinite(data.stars) ? Math.round(Number(data.stars)) : Math.max(1, Math.min(5, Math.round(score / 100)));
+    if (score > 100) score = 100;
+    let stars = Number.isFinite(data.stars) ? Math.round(Number(data.stars)) : Math.max(1, Math.min(5, Math.round(score / 20)));
     if (stars < 1) stars = 1;
     if (stars > 5) stars = 5;
 

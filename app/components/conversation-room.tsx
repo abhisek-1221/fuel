@@ -8,12 +8,14 @@ import { GradientButton } from './gradientbut';
 interface ConversationRoomProps {
   questTitle: string;
   assistantId: string;
+  narrationAudioUrl: string;
   onBack: () => void;
 }
 
 const ConversationRoom: React.FC<ConversationRoomProps> = ({ 
   questTitle, 
-  assistantId, 
+  assistantId,
+  narrationAudioUrl, 
   onBack 
 }) => {
   const radialRef = React.useRef<RadialCardHandle | null>(null);
@@ -75,7 +77,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
       {/* Audio Element */}
       <audio
         ref={audioRef}
-        src="https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcmiZyDYIgbz8HqnrKW4fstAiDNlPZ7vFcmV0x"
+        src={narrationAudioUrl}
         onEnded={handleAudioEnd}
         preload="auto"
       />
