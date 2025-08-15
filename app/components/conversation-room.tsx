@@ -254,20 +254,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
         </div>
       )}
 
-      {/* Footer */}
-      <div className="relative z-10 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <div className="order-1 sm:order-2">
-            <GradientButton
-              onClick={() => radialRef.current?.requestScore()}
-              disabled={!canScore}
-              variant="beige"
-              size="md"
-              text="Show Score"
-            />
-          </div>
-        </div>
-      </div>
+
           </motion.div>
         )}
       </AnimatePresence>
