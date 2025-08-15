@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import RadialCard, { RadialCardHandle } from './radial-card';
 import { GradientButton } from './gradientbut';
@@ -17,10 +17,13 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
   onBack 
 }) => {
   const radialRef = React.useRef<RadialCardHandle | null>(null);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const [canScore, setCanScore] = React.useState(false);
   const [secondsLeft, setSecondsLeft] = React.useState<number | null>(null);
   const [sessionActive, setSessionActive] = React.useState(false);
   const [isInitiating, setIsInitiating] = React.useState(false);
+  const [showIntro, setShowIntro] = React.useState(true);
+  const [audioPlaying, setAudioPlaying] = React.useState(false);
   const getQuestColor = (title: string) => {
     switch (title.toLowerCase()) {
       case 'girlfriend':
@@ -40,15 +43,143 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
     }
   };
 
+  // Audio intro handling
+  React.useEffect(() => {
+    if (showIntro && audioRef.current) {
+      audioRef.current.play().then(() => {
+        setAudioPlaying(true);
+      }).catch((error) => {
+        console.error('Audio play failed:', error);
+        // If audio fails to play, skip intro automatically
+        setShowIntro(false);
+      });
+    }
+  }, [showIntro]);
+
+  const handleAudioEnd = () => {
+    setAudioPlaying(false);
+    setShowIntro(false);
+  };
+
+  const skipIntro = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setAudioPlaying(false);
+    setShowIntro(false);
+  };
+
   return (
-    <motion.div
-      className="min-h-screen flex flex-col overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Header */}
+    <>
+      {/* Audio Element */}
+      <audio
+        ref={audioRef}
+        src="https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcmiZyDYIgbz8HqnrKW4fstAiDNlPZ7vFcmV0x"
+        onEnded={handleAudioEnd}
+        preload="auto"
+      />
+
+      <AnimatePresence mode="wait">
+        {showIntro ? (
+          // Intro Screen
+          <motion.div
+            key="intro-screen"
+            className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-amber-50 to-orange-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Skip Button */}
+            <motion.div
+              className="absolute top-6 right-6"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <motion.button
+                onClick={skipIntro}
+                className="px-6 py-3 bg-white/80 backdrop-blur-sm border border-amber-200 rounded-full text-amber-900 font-semibold shadow-lg hover:bg-white/90 transition-all duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Skip Intro
+              </motion.button>
+            </motion.div>
+
+            {/* Intro Content */}
+            <motion.div
+              className="text-center max-w-lg"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.h1 
+                className="text-4xl sm:text-5xl font-bold text-amber-900 mb-6"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              >
+                {questTitle} Quest
+              </motion.h1>
+              
+              <motion.div
+                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl"
+                animate={{ 
+                  scale: audioPlaying ? [1, 1.1, 1] : 1,
+                  rotate: audioPlaying ? [0, 5, -5, 0] : 0
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: audioPlaying ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
+              >
+                <motion.div
+                  className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full"
+                  animate={{ 
+                    scale: audioPlaying ? [1, 0.8, 1] : 1
+                  }}
+                  transition={{ 
+                    duration: 1, 
+                    repeat: audioPlaying ? Infinity : 0,
+                    ease: "easeInOut"
+                  }}
+                />
+              </motion.div>
+
+              <motion.p 
+                className="text-lg sm:text-xl text-amber-800 mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                {audioPlaying ? "Listen to the quest briefing..." : "Preparing your quest..."}
+              </motion.p>
+
+              {audioPlaying && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-sm text-amber-700"
+                >
+                  Audio is playing...
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
+        ) : (
+          // Main Conversation Room
+          <motion.div
+            key="conversation-room"
+            className="min-h-screen flex flex-col overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Header */}
       <div className="relative z-10 p-4 sm:p-6">
         <div className="flex items-center justify-between">
           <motion.div
@@ -135,7 +266,10 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
