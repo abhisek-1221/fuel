@@ -39,9 +39,9 @@ const useVapi = (assistantId: string) => {
         setError(null);
         console.log("Call started");
 
-        // Start 10s countdown
+        // Start 3 minute (180s) countdown
         clearCountdown();
-        setRemainingSeconds(10);
+        setRemainingSeconds(180);
         countdownIntervalRef.current = setInterval(() => {
           setRemainingSeconds((prev) => {
             if (prev === null) return null;

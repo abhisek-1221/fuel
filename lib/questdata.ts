@@ -6,7 +6,7 @@ export const quests = [
       description: "You've forgotten your girlfriend's birthday. Navigate this difficult conversation by showing empathy, taking accountability, and finding a way to make it right.",
       narrationAudioUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcyTZNM5xMPezJKG5wi9VcrNAQC6ajU0nZxuET",
       questCardImageUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcTXclUPjmLoQaxv9z3MBr1uV6qpRWK7dfPFDU",
-      assistantId: "5fa87ca6-ab9a-45d9-8772-9dcb651ecdc4",
+      assistantId: "fed80e5d-d21f-4feb-bd0a-8a2f7d0e6477",
       scoringAlgorithmPrompt: `Scoring Rubric (100 Points)
   
   1. Initial Response & Acknowledgment (20 Points)
@@ -65,7 +65,7 @@ export const quests = [
       description: "You've just landed and your luggage is missing. Work with the airline staff to provide a clear and detailed description of your bag to help them find it.",
       narrationAudioUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcz1aTa4Lsb2ywrJUuNxVvkTMOAR4qHeFnthpK",
       questCardImageUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcCjl6hIiuwZMHPvml935CToS0cROhDY8gqeBf",
-      assistantId: "10a36fd6-7031-49da-8e5d-fc5961edf9ae",
+      assistantId: "ef941dfd-74eb-4c98-9c13-4e975adaffcc",
       scoringAlgorithmPrompt: `Passenger who lost their bag
   Max Score: 100 points
   
@@ -103,7 +103,7 @@ export const quests = [
       description: "You are a waiter who has just served a non-vegetarian dish to a vegetarian customer. Your goal is to apologize, explain the mistake, and resolve the issue professionally and with empathy.",
       narrationAudioUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbcIqw4GDAp8OqcZ1oyFs3CfhJiWRlg2TDjXMQU",
       questCardImageUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc5g6PtNH4lEs4ZRxXh8W23ObfzyapBmQoj6Aw",
-      assistantId: "ef9eb4ea-a942-4738-84e6-8ffb1a217b8c",
+      assistantId: "3b959fc4-2ab2-4d78-9579-8c4b080b1440",
       scoringAlgorithmPrompt: `Waiter Skills Evaluation — 100 Point Scale
   1. Initial Reaction & Acknowledgment — 15 points
   - How quickly and sincerely the waiter recognizes the complaint.
@@ -152,7 +152,7 @@ export const quests = [
       description: "You are a candidate for a new role. Impress the HR interviewer by demonstrating your skills, experience, and professionalism.",
       narrationAudioUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbchu8iZ1osWyQqx6l9Vf8iLceG0O5wzgUKSbIA",
       questCardImageUrl: "https://xo8yz727kp.ufs.sh/f/FyQUTC66sKbc9iYGtPW2zauULtyN374irWKMGVH5eDc1bJFC",
-      assistantId: "568c483f-2756-4355-bded-04e59abfd3b2",
+      assistantId: "7a4945bf-b006-4eab-9075-6ddde7b4332c",
       scoringAlgorithmPrompt: `Candidate Evaluation Metric – HR Interview Scenario (Total: 100 points)
   1. Communication Skills (20 points)
   - 0–7 pts: Responses unclear, disorganized, or too brief; overuse of filler words.

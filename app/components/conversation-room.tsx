@@ -238,18 +238,13 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
         </motion.div>
       </div>
 
-      {/* Centered Countdown */}
-      {sessionActive && secondsLeft !== null && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64">
-          <div className="px-4 py-2 rounded-xl bg-[#e6d5c1] border border-amber-900/20 shadow-lg flex items-baseline justify-center">
-            <span className="text-4xl sm:text-5xl font-bold tracking-tight text-amber-900 leading-none">{secondsLeft}</span>
-            <span className="ml-2 text-amber-800/80 text-lg sm:text-xl leading-none">s</span>
-          </div>
-          <div className="mt-2 h-1 rounded-full overflow-hidden bg-amber-900/10">
-            <div
-              className="h-full bg-amber-800/60 transition-[width] duration-1000 ease-linear"
-              style={{ width: `${Math.max(0, Math.min(100, (secondsLeft / 10) * 100))}%` }}
-            />
+      {/* Bottom Countdown (mm:ss) */}
+      {sessionActive && typeof secondsLeft === 'number' && secondsLeft >= 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20">
+          <div className="px-5 py-2.5 rounded-xl bg-white/80 backdrop-blur border border-black/10 shadow-lg">
+            <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black tabular-nums">
+              {`${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`}
+            </span>
           </div>
         </div>
       )}
