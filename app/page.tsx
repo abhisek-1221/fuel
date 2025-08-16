@@ -29,7 +29,7 @@ export default function LandingPage(): JSX.Element {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="pt-20 pb-8 flex justify-center"
+            className="pt-8 pb-4 flex justify-center"
           >
             <Link href="/" className="flex items-center justify-center">
               <Image
@@ -42,12 +42,12 @@ export default function LandingPage(): JSX.Element {
             </Link>
           </motion.div>
 
-          {/* Mobile Text in Middle */}
+          {/* Mobile Text at 3/4 Height */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-            className="flex-1 flex items-center justify-center px-8 text-center"
+            className="flex-1 flex items-end justify-center px-8 text-center pb-32"
           >
             <h1 className="text-white text-2xl font-semibold">
               You are the source<br />
@@ -60,7 +60,7 @@ export default function LandingPage(): JSX.Element {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-            className="mb-20"
+            className="mb-10"
           >
             <div className="flex items-center justify-center rounded-lg p-1 shadow-2xl">
               <Link href={process.env.NODE_ENV === 'production' ? '/waitlist' : '/test'}>
