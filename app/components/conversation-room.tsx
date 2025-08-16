@@ -182,7 +182,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
             transition={{ duration: 0.3 }}
           >
             {/* Header */}
-      <div className="relative z-10 p-4 sm:p-6">
+      <div className="relative z-10 pt-8 px-4 pb-4 sm:p-6">
         <div className="flex items-center justify-between">
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -201,8 +201,8 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           </motion.div>
           
           <div className="text-center flex-1 mx-4">
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
-            <p className="text-xs sm:text-sm text-black/70 mt-1">
+            <h1 className="hidden sm:block text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
+            <p className="text-sm sm:text-sm text-black/70 mt-1 leading-tight">
               {isInitiating ? "Initializing quest..." : "Click on Microphone to start conversation"}
             </p>
           </div>
