@@ -62,7 +62,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
       
       {/* Main Card Container */}
       <motion.div
-        className="relative w-full max-w-4xl mx-auto max-h-[90vh] overflow-hidden"
+        className="relative w-full max-w-lg mx-auto max-h-[90vh] overflow-hidden"
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -129,9 +129,9 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                 <p className="text-amber-800 font-medium text-center">Unable to determine score</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 gap-6">
                 {/* Score Section */}
-                <div className="lg:col-span-1">
+                <div>
                   <div 
                     className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl text-center relative overflow-hidden"
                     style={{
@@ -197,7 +197,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                 </div>
 
                 {/* Details Section */}
-                <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {/* Summary */}
                   {summary && (
                     <div 
@@ -213,7 +213,7 @@ const BeigeScoreCard: React.FC<BeigeScoreCardProps> = ({
                   )}
 
                   {/* Strengths and Improvements */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="grid grid-cols-1 gap-4 sm:gap-6">
                     {/* Strengths */}
                     <div 
                       className="p-4 sm:p-6 rounded-xl sm:rounded-2xl"
