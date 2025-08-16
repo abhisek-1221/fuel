@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { ArrowLeft } from 'lucide-react';
 import RadialCard, { RadialCardHandle } from './radial-card';
 import { GradientButton } from './gradientbut';
@@ -126,30 +127,22 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
                 {questTitle} Quest
               </motion.h1>
               
-              <motion.div
-                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl"
-                animate={{ 
-                  scale: audioPlaying ? [1, 1.1, 1] : 1,
-                  rotate: audioPlaying ? [0, 5, -5, 0] : 0
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: audioPlaying ? Infinity : 0,
-                  ease: "easeInOut"
-                }}
-              >
+              {audioPlaying ? (
+                <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8">
+                  <DotLottieReact
+                    src="https://lottie.host/046a38e7-1a8a-49bc-9baf-0cc1425294e2/H1v74tcKWe.lottie"
+                    loop
+                    autoplay
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+              ) : (
                 <motion.div
-                  className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full"
-                  animate={{ 
-                    scale: audioPlaying ? [1, 0.8, 1] : 1
-                  }}
-                  transition={{ 
-                    duration: 1, 
-                    repeat: audioPlaying ? Infinity : 0,
-                    ease: "easeInOut"
-                  }}
-                />
-              </motion.div>
+                  className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl"
+                >
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full" />
+                </motion.div>
+              )}
 
               <motion.p 
                 className="text-lg sm:text-xl text-amber-800 mb-8"
