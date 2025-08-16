@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion } from 'framer-motion';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Mic, MicOff, X, Star, Trophy, Sparkles, Loader2 } from 'lucide-react';
 import useVapi from '@/hooks/use-vapi';
 import BeigeScoreCard from './beige-score-card';
@@ -269,7 +270,14 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
           <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4">
             <div className="w-full max-w-md rounded-2xl bg-[#e6d5c1] border border-amber-900/20 shadow-2xl p-4 sm:p-5">
               <div className="flex items-center gap-3">
-                <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900 animate-spin" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12">
+                  <DotLottieReact
+                    src="https://lottie.host/a889edbb-8624-4a3f-9043-9e007bd89982/iSusphM9sr.lottie"
+                    loop
+                    autoplay
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
                 <div>
                   <p className="text-amber-900 font-semibold text-sm sm:text-base">Evaluating score…</p>
                   <p className="text-amber-800/80 text-xs sm:text-sm">Analyzing your conversation</p>
