@@ -42,21 +42,21 @@ export default function LandingPage(): JSX.Element {
             </Link>
           </motion.div>
 
-          {/* Mobile Spacer */}
-          <div className="flex-1"></div>
-
-          {/* Mobile Tagline just above button */}
+          {/* Mobile Tagline just below logo */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-            className="px-6 text-center pb-6"
+            className="px-6 text-center pt-4"
           >
             <p className="text-white text-sm italic leading-relaxed">
               We are Ai data research lab.<br />
               Turning everyday voices into the fuel that powers real-world AI.
             </p>
           </motion.div>
+
+          {/* Mobile Spacer */}
+          <div className="flex-1"></div>
 
           {/* Mobile Join Button at Bottom */}
           <motion.div
