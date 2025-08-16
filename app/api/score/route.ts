@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
+import { auth } from '@clerk/nextjs/server';
+import { prisma } from '@/lib/prisma';
 import { quests } from '../../../lib/questdata';
 
 type ConversationEntry = { role: string; text: string };
@@ -35,7 +37,7 @@ export async function POST(req: Request) {
     
     const scenario = questTitle ? `Scenario: ${questTitle}.` : '';
 
-    const instruction = `You are a strict evaluator for spoken role-play practice. ${scenario} Read the conversation transcript between the user and the assistant. Evaluate how well the USER handled the situation.
+    const instruction = `You are a strict evaluator for spoken role-play practice. You have to evaluate the user not the bot. ${scenario} Read the conversation transcript between the user and the assistant. Evaluate how well the USER handled the situation.Don't mention that he/she was talking to the assistant. Instead of the assistant mention the person user is talking, e.g. airport staff, interviewer, etc.
 
 ${scoringPrompt ? `Use this detailed scoring rubric:\n${scoringPrompt}\n\n` : ''}
 
@@ -56,7 +58,7 @@ ${!scoringPrompt ? `Scoring guidance (0..100):
     const prompt = `${instruction}\n\nTranscript:\n${conversationText}\n\nJSON:`;
 
     const { text } = await generateText({
-      model: google('models/gemini-1.5-flash') as any,
+      model: google('models/gemini-2.5-flash-lite') as any,
       prompt,
       temperature: 0.2,
       maxRetries: 1,
@@ -88,6 +90,29 @@ ${!scoringPrompt ? `Scoring guidance (0..100):
     const summary = typeof data.summary === 'string' ? data.summary : '';
     const strengths = Array.isArray(data.strengths) ? (data.strengths as unknown[]).filter((s: unknown) => typeof s === 'string').slice(0, 5) as string[] : [];
     const improvements = Array.isArray(data.improvements) ? (data.improvements as unknown[]).filter((s: unknown) => typeof s === 'string').slice(0, 5) as string[] : [];
+
+    // Convert score to points and save to database
+    try {
+      const { userId } = await auth();
+      if (userId) {
+        // Convert score to points (you can adjust this formula)
+        const points = Math.max(1, Math.round(score / 10)); // Score of 100 = 10 points, minimum 1 point
+        
+        await prisma.user.update({
+          where: {
+            clerkUserId: userId,
+          },
+          data: {
+            totalPoints: {
+              increment: points,
+            },
+          },
+        });
+      }
+    } catch (dbError) {
+      console.error('Error updating user points:', dbError);
+      // Don't fail the entire request if points update fails
+    }
 
     return NextResponse.json({ score, stars, summary, strengths, improvements });
   } catch (error: any) {

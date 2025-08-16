@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEONDB_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique
+  age         Int
+  gender      String   // "male", "female", "nonbinary"
+  accent      String   // "Indian English", "American English", "British English", "African English"
+  nativeLanguage String
+  location    String?  // User's location/country
+  totalPoints Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("users")
+}

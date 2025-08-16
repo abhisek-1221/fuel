@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 const heroBackgroundImageUrl =
   "https://pbs.twimg.com/media/GssNsUWX0AA0skP?format=jpg&name=4096x4096";
@@ -63,16 +64,30 @@ export default function LandingPage(): JSX.Element {
             className="mb-20"
           >
             <div className="flex items-center justify-center rounded-lg p-1 shadow-2xl">
-              <Link href="/test">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
-                >
-                  TRY NOW
-                </motion.button>
-              </Link>
+              <SignedOut>
+                <SignInButton mode="modal" fallbackRedirectUrl="/test">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
+                  >
+                    TRY NOW
+                  </motion.button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <Link href="/test">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
+                  >
+                    TRY NOW
+                  </motion.button>
+                </Link>
+              </SignedIn>
             </div>
           </motion.div>
         </div>
@@ -206,7 +221,8 @@ export default function LandingPage(): JSX.Element {
                 className="absolute bottom-12 right-16"
             >
                 <div className="flex items-center justify-center rounded-lg bg-[#F0EBE3] p-1 shadow-2xl">
-                    <Link href="/test">
+                    <SignedOut>
+                      <SignInButton mode="modal" fallbackRedirectUrl="/test">
                         <motion.button
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
@@ -215,7 +231,20 @@ export default function LandingPage(): JSX.Element {
                         >
                             TRY NOW
                         </motion.button>
-                    </Link>
+                      </SignInButton>
+                    </SignedOut>
+                    <SignedIn>
+                      <Link href="/test">
+                        <motion.button
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
+                        >
+                            TRY NOW
+                        </motion.button>
+                      </Link>
+                    </SignedIn>
                 </div>
             </motion.div>
         </div>

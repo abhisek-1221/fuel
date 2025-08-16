@@ -17,9 +17,10 @@ interface RadialCardProps {
   onCanScoreChange?: (canScore: boolean) => void;
   onCountdownChange?: (seconds: number | null, isActive: boolean) => void;
   onInitiatingChange?: (isInitiating: boolean) => void;
+  onScoreCalculated?: () => void;
 }
 
-const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange, onCountdownChange, onInitiatingChange }, ref) => {
+const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId, questTitle, onCanScoreChange, onCountdownChange, onInitiatingChange, onScoreCalculated }, ref) => {
   const { volumeLevel, isSessionActive, toggleCall, conversation, remainingSeconds, connecting, assistantIsSpeaking } = useVapi(assistantId);
   const [bars, setBars] = useState(Array(50).fill(0));
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
@@ -113,6 +114,10 @@ const RadialCard = forwardRef<RadialCardHandle, RadialCardProps>(({ assistantId,
       setStrengths(Array.isArray(data.strengths) ? data.strengths.filter((s: unknown) => typeof s === 'string') : []);
       setImprovements(Array.isArray(data.improvements) ? data.improvements.filter((s: unknown) => typeof s === 'string') : []);
       setScoreModalOpen(true);
+      // Call the callback to refresh points
+      if (onScoreCalculated) {
+        onScoreCalculated();
+      }
     } catch (err: any) {
       console.error('Score error:', err);
       setScoreError(err?.message || 'Failed to score');

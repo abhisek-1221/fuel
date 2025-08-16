@@ -11,13 +11,15 @@ interface ConversationRoomProps {
   assistantId: string;
   narrationAudioUrl: string;
   onBack: () => void;
+  onScoreCalculated?: () => void;
 }
 
 const ConversationRoom: React.FC<ConversationRoomProps> = ({ 
   questTitle, 
   assistantId,
   narrationAudioUrl, 
-  onBack 
+  onBack,
+  onScoreCalculated 
 }) => {
   const radialRef = React.useRef<RadialCardHandle | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
@@ -96,7 +98,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           >
             {/* Skip Button */}
             <motion.div
-              className="absolute top-6 right-6"
+              className="absolute top-6 left-6"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -176,10 +178,11 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           >
             {/* Header */}
       <div className="relative z-10 pt-8 px-4 pb-4 sm:p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            className="self-start"
           >
             <GradientButton
               onClick={onBack}
@@ -193,14 +196,14 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
             </GradientButton>
           </motion.div>
           
-          <div className="text-center flex-1 mx-4">
+          <div className="text-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2">
             <h1 className="hidden sm:block text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
             <p className="text-sm sm:text-sm text-black/70 mt-1 leading-tight">
               {isInitiating ? "Initializing quest..." : "Click on Microphone to start conversation"}
             </p>
           </div>
           
-          <div className="w-16 sm:w-32" /> {/* Spacer for centering */}
+          <div className="hidden sm:block w-32" /> {/* Spacer for balance on desktop */}
         </div>
       </div>
 
@@ -227,6 +230,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
               setSessionActive(isActive);
             }}
             onInitiatingChange={setIsInitiating}
+            onScoreCalculated={onScoreCalculated}
           />
         </motion.div>
       </div>
