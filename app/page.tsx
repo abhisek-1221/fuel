@@ -16,43 +16,46 @@ export default function LandingPage(): JSX.Element {
   return (
     <main className="w-full">
       {/* Mobile Layout */}
-      <section className="relative min-h-screen w-full overflow-hidden bg-black sm:hidden">
+      <section className="relative h-screen w-full overflow-hidden bg-black sm:hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${heroBackgroundImageUrl}')` }}
           aria-hidden
         />
         <div className="absolute inset-0 bg-black/40" aria-hidden />
-        <div className="relative z-10 min-h-screen w-full flex flex-col">
+        <div className="relative z-10 h-full w-full flex flex-col justify-between">
           {/* Mobile Logo at Top */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="pt-8 pb-4 flex justify-center"
+            className="pt-6 flex justify-center"
           >
             <Link href="/" className="flex items-center justify-center">
               <Image
                 src="/fll.png"
                 alt="Feul.AI Logo"
-                width={144}
-                height={144}
-                className="h-36 w-36 rounded-full"
+                width={96}
+                height={96}
+                className="h-24 w-24 rounded-full"
               />
             </Link>
           </motion.div>
 
-          {/* Mobile Text at 3/4 Height */}
+          {/* Mobile Spacer */}
+          <div className="flex-1"></div>
+
+          {/* Mobile Tagline just above button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-            className="flex-1 flex items-end justify-center px-8 text-center pb-32"
+            className="px-6 text-center pb-6"
           >
-            <h1 className="text-white text-2xl font-semibold">
-              You are the source<br />
-              Feul is your refinery
-            </h1>
+            <p className="text-white text-sm italic leading-relaxed">
+              We are Ai data research lab.<br />
+              Turning everyday voices into the fuel that powers real-world AI.
+            </p>
           </motion.div>
 
           {/* Mobile Join Button at Bottom */}
@@ -60,7 +63,7 @@ export default function LandingPage(): JSX.Element {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-            className="mb-10"
+            className="pb-8 safe-area-inset-bottom"
           >
             <div className="flex items-center justify-center rounded-lg p-1 shadow-2xl">
               <Link href={process.env.NODE_ENV === 'production' ? '/waitlist' : '/test'}>
@@ -145,9 +148,9 @@ export default function LandingPage(): JSX.Element {
                 initial={{ opacity: 0, x: 60, y: -20 }}
                 animate={{ opacity: 1, x: 0, y: 0 }}
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-                className="text-right font-semibold leading-[1.05] tracking-tight text-white drop-shadow-lg text-4xl md:text-5xl lg:text-6xl"
+                className="text-right font-semibold leading-[1.05] tracking-tight text-white drop-shadow-lg text-xl md:text-2xl lg:text-3xl"
             >
-                You are the source. <span className="italic">Feul</span> is your refinery.
+                We are <span className="italic">Ai data research lab</span>. Turning everyday voices into the fuel that powers real-world AI.
             </motion.h1>
             </div>
 

@@ -62,4 +62,20 @@
   * {
     @apply border-border; }
   body {
-    @apply bg-background text-foreground; } }
+    @apply bg-background text-foreground; 
+    /* Prevent mobile scrolling and ensure proper viewport */
+    overscroll-behavior: none;
+  }
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+  /* Mobile-specific viewport handling */
+  @media (max-width: 640px) {
+    html, body {
+      height: 100vh;
+      height: 100dvh; /* Dynamic viewport height for mobile browsers */
+      overflow: hidden;
+    }
+  }
+}
