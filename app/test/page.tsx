@@ -54,7 +54,7 @@ export default function Test() {
               transition={{ delay: 0.1 }}
             >
               <h1 className="text-4xl font-bold text-black mb-4">Choose Your Quest</h1>
-              <p className="text-lg text-white/70">Select an AI assistant to start your adventure</p>
+              <p className="text-lg text-black">Select an AI assistant to start your adventure</p>
             </motion.div>
 
             {/* Quest Cards Grid */}

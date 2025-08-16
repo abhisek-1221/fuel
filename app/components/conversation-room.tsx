@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { ArrowLeft } from 'lucide-react';
 import RadialCard, { RadialCardHandle } from './radial-card';
 import { GradientButton } from './gradientbut';
@@ -126,30 +127,22 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
                 {questTitle} Quest
               </motion.h1>
               
-              <motion.div
-                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl"
-                animate={{ 
-                  scale: audioPlaying ? [1, 1.1, 1] : 1,
-                  rotate: audioPlaying ? [0, 5, -5, 0] : 0
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: audioPlaying ? Infinity : 0,
-                  ease: "easeInOut"
-                }}
-              >
+              {audioPlaying ? (
+                <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8">
+                  <DotLottieReact
+                    src="https://lottie.host/046a38e7-1a8a-49bc-9baf-0cc1425294e2/H1v74tcKWe.lottie"
+                    loop
+                    autoplay
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+              ) : (
                 <motion.div
-                  className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full"
-                  animate={{ 
-                    scale: audioPlaying ? [1, 0.8, 1] : 1
-                  }}
-                  transition={{ 
-                    duration: 1, 
-                    repeat: audioPlaying ? Infinity : 0,
-                    ease: "easeInOut"
-                  }}
-                />
-              </motion.div>
+                  className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl"
+                >
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full" />
+                </motion.div>
+              )}
 
               <motion.p 
                 className="text-lg sm:text-xl text-amber-800 mb-8"
@@ -182,7 +175,7 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
             transition={{ duration: 0.3 }}
           >
             {/* Header */}
-      <div className="relative z-10 p-4 sm:p-6">
+      <div className="relative z-10 pt-8 px-4 pb-4 sm:p-6">
         <div className="flex items-center justify-between">
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -201,8 +194,8 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
           </motion.div>
           
           <div className="text-center flex-1 mx-4">
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
-            <p className="text-xs sm:text-sm text-black/70 mt-1">
+            <h1 className="hidden sm:block text-xl lg:text-2xl font-bold text-black">{questTitle} Quest</h1>
+            <p className="text-sm sm:text-sm text-black/70 mt-1 leading-tight">
               {isInitiating ? "Initializing quest..." : "Click on Microphone to start conversation"}
             </p>
           </div>
@@ -238,36 +231,18 @@ const ConversationRoom: React.FC<ConversationRoomProps> = ({
         </motion.div>
       </div>
 
-      {/* Centered Countdown */}
-      {sessionActive && secondsLeft !== null && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-20 w-48 sm:w-64">
-          <div className="px-4 py-2 rounded-xl bg-[#e6d5c1] border border-amber-900/20 shadow-lg flex items-baseline justify-center">
-            <span className="text-4xl sm:text-5xl font-bold tracking-tight text-amber-900 leading-none">{secondsLeft}</span>
-            <span className="ml-2 text-amber-800/80 text-lg sm:text-xl leading-none">s</span>
-          </div>
-          <div className="mt-2 h-1 rounded-full overflow-hidden bg-amber-900/10">
-            <div
-              className="h-full bg-amber-800/60 transition-[width] duration-1000 ease-linear"
-              style={{ width: `${Math.max(0, Math.min(100, (secondsLeft / 10) * 100))}%` }}
-            />
+      {/* Bottom Countdown (mm:ss) */}
+      {sessionActive && typeof secondsLeft === 'number' && secondsLeft >= 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20">
+          <div className="px-5 py-2.5 rounded-xl bg-white/80 backdrop-blur border border-black/10 shadow-lg">
+            <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black tabular-nums">
+              {`${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`}
+            </span>
           </div>
         </div>
       )}
 
-      {/* Footer */}
-      <div className="relative z-10 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <div className="order-1 sm:order-2">
-            <GradientButton
-              onClick={() => radialRef.current?.requestScore()}
-              disabled={!canScore}
-              variant="beige"
-              size="md"
-              text="Show Score"
-            />
-          </div>
-        </div>
-      </div>
+
           </motion.div>
         )}
       </AnimatePresence>

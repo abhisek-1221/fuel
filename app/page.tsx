@@ -63,14 +63,14 @@ export default function LandingPage(): JSX.Element {
             className="mb-20"
           >
             <div className="flex items-center justify-center rounded-lg p-1 shadow-2xl">
-              <Link href="/waitlist">
+              <Link href="/test">
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
                 >
-                  JOIN US
+                  TRY NOW
                 </motion.button>
               </Link>
             </div>
@@ -206,14 +206,14 @@ export default function LandingPage(): JSX.Element {
                 className="absolute bottom-12 right-16"
             >
                 <div className="flex items-center justify-center rounded-lg bg-[#F0EBE3] p-1 shadow-2xl">
-                    <Link href="/waitlist">
+                    <Link href="/test">
                         <motion.button
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="rounded-md bg-white px-6 py-2 text-lg font-semibold text-black shadow-lg"
                         >
-                            JOIN US
+                            TRY NOW
                         </motion.button>
                     </Link>
                 </div>
